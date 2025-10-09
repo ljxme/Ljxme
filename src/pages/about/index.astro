@@ -6,15 +6,16 @@ import Substats from '@/components/about/Substats.astro'
 import ToolSection from '@/components/about/ToolSection.astro'
 
 const headings = [
-  { depth: 2, slug: 'hobbies', text: 'Hobbies' },
-  { depth: 2, slug: 'tools', text: 'Tools' },
-  { depth: 2, slug: 'social-networks', text: 'Social Networks' },
-  { depth: 2, slug: 'gossips', text: 'Gossips' },
-  { depth: 2, slug: 'about-blog', text: 'About Blog' }
+  { depth: 2, slug: 'hobbies', text: '爱好' },
+  { depth: 2, slug: 'tools', text: '工具' },
+  // { depth: 2, slug: 'subscription', text: '订阅' },
+  { depth: 2, slug: 'social-networks', text: '社交网络' },
+  // { depth: 2, slug: 'gossips', text: 'Gossips' },
+  { depth: 2, slug: 'about-blog', text: '关于博客' }
 ]
 ---
 
-<PageLayout title='About' {headings} comment>
+<PageLayout title='关于' {headings} comment>
   <p>作者简介</p>
   <p>
     一个无聊无趣的人~🫥
@@ -127,12 +128,35 @@ const headings = [
       },
       {
         name: 'Windows 11',
-        description: 'Framework Laptop 16',
+        description: 'ASUS TUF Gaming F5 Pro',
         href: 'https://news.microsoft.com/windows11-general-availability/',
         icon: import('@/assets/tools/windows11.svg?raw')
       }
     ]}
   />
+<!-- subscription 
+  {/* subscription */}
+  <h2 id='subscription'>订阅</h2>
+  <p>当前订阅的服务如下（包含AFF链接）：</p>
+  <ToolSection
+    class='mb-5'
+    title='环境'
+    tools={[
+      {
+        name: 'Debian 12.9',
+        description: 'Aliyun Server',
+        href: 'https://www.debian.org/',
+        icon: import('@/assets/tools/debian.svg?raw')
+      },
+      {
+        name: 'Windows 11',
+        description: 'ASUS TUF Gaming F5 Pro',
+        href: 'https://news.microsoft.com/windows11-general-availability/',
+        icon: import('@/assets/tools/windows11.svg?raw')
+      }
+    ]}
+  />
+-->
 
   {/* social-networks */}
   <h2 id='social-networks'>社交网络</h2>
@@ -173,18 +197,24 @@ const headings = [
   <Timeline
     events={[
       {
-        date: '2025-10-08',
+        date: '2025-10-07',
         content:
-          '在阿里云注册域名 <b>ljx.icu</b> 并选择 <a href="https://astro.build/" target="_blank">Astro</a> 作为框架，<a href="https://github.com/cworld1/astro-theme-pure" target="_blank">Astro Theme Pure</a> 作为主题，开始逐渐迁移博客到阿里云服务器。'
+          '在 <a href="https://wanwang.aliyun.com/" target="_blank">阿里云（原万网）</a> 注册域名 <b>ljx.icu</b> 并选择 <a href="https://astro.build/" target="_blank">Astro</a> 作为框架，<a href="https://github.com/cworld1/astro-theme-pure" target="_blank">Astro Theme Pure</a> 作为主题，开始逐渐迁移博客到阿里云服务器。'
       },
       {
-        date: '2024-08-26',
+        date: '2025-08-26',
         content:
-          '在 <a href="https://github.com/cworld1/astro-theme-pure"target="_blank">namesilo</a> 注册域名 <b>artemisia.icu</b> '
+          '在 <a href="https://www.namesilo.com/"target="_blank">NameSilo</a> 注册域名 <b>artemisia.icu</b> ，并用 <a href="https://www.cloudflare.com/"target="_blank">Cloudflare</a> 进行域名托管、DNS解析等服务，采用 <a href="https://docs.tangly1024.com/"target="_blank">NotionNext</a> 和 <a href="https://www.notion.com/"target="_blank">Notion</a> 作为博客的框架及内容管理系统。博客则静态托管于 <a href="https://vercel.com/"target="_blank">Vercel</a> 。'
       },
       {
-        date: '2024-07-27',
-        content: 'Began writing website docs'
+        date: '2021-2024',
+        content: 
+          '博客写作换成了 <a href="https://gridea.dev/"target="_blank">Gridea</a> 作为客户端，选择 <a href="https://www.netlify.com/"target="_blank">Netlify</a> 作为托管平台，GitHub仓库只作为源码备份使用。<s>域名都不记得在哪个免费平台薅的了QAQ</s>'
+      },
+      {
+        date: '2019-2020',
+        content: 
+          '初识博客,采用 <a href="https://pages.github.com/"target="_blank">GitHubPages</a> 作为托管平台,开始写作。<s>其实也没怎么写，只是初步接触到了博客这个东西。</s>'
       }
     ]}
   />
