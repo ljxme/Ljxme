@@ -1,5 +1,6 @@
 ---
-import { Button, Collapse, Spoiler, Timeline } from 'astro-pure/user'
+import { Button, Spoiler, Timeline } from 'astro-pure/user'
+// import { Collapse } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import Substats from '@/components/about/Substats.astro'
 import ToolSection from '@/components/about/ToolSection.astro'
@@ -14,39 +15,34 @@ const headings = [
 ---
 
 <PageLayout title='About' {headings} comment>
-  <p>Developer / Designer</p>
+  <p>作者简介</p>
   <p>
-    Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione indoctum
-    dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel, at eum oratio
-    possit voluptatum.
+    一个无聊无趣的人~🫥
   </p>
   <p>
-    My motto: Stay hungry, Stay foolish. <Spoiler>这里可以夹私货，比如为什么要演奏春日影！</Spoiler>
+    格言：无。 <Spoiler>一只闲云野鹤🪶~</Spoiler>
   </p>
-  <Button title='Sponsor Me' class='w-fit' href='/projects#sponsorship' variant='ahead' />
+  <Button title='赞助我❤️' class='w-fit' href='/projects#sponsorship' variant='ahead' />
 
   {/* general-talk */}
-  <h2 id='hobbies'>Hobbies</h2>
+  <h2 id='hobbies'>爱好</h2>
   <ul>
-    <li>Lorem ipsum dolor sit amet, vidit suscipit at mei.</li>
-    <li>
-      Quem denique mea id. Usu ei regione indoctum dissentiunt, cu meliore fuisset mei, vel quod
-      voluptua ne.
-    </li>
-    <li>Ex dicat impedit mel, at eum oratio possit voluptatum.</li>
-    <li>Impetus fuisset ullamcorper pri cu, his posse iisque ad, aliquam honestatis usu id.</li>
+    <li>之前乐于读些闲书消磨时间</li>
+    <li>现在乐于做些不知何意义的事蹉跎光阴</li>
+    <li>未来乐于追忆现在的事回味过往时光</li>
   </ul>
 
   {/* tools */}
-  <h2 id='tools'>Tools</h2>
-  <p>Current support tools as follow:</p>
+  <h2 id='tools'>工具</h2>
+  <p>当前所用的工具如下：</p>
+  <!-- design tools
   <ToolSection
     class='mb-5'
-    title='Design'
+    title='设计工具'
     tools={[
       {
         name: 'Photoshop',
-        description: 'Picture Editing',
+        description: '图片编辑',
         href: 'https://www.adobe.com/products/photoshop',
         icon: import('@/assets/tools/photoshop.svg?raw')
       },
@@ -70,9 +66,10 @@ const headings = [
       }
     ]}
   />
+  -->
   <ToolSection
     class='mb-5'
-    title='Productivity'
+    title='生产力工具'
     tools={[
       {
         name: 'Chrome',
@@ -81,10 +78,10 @@ const headings = [
         icon: import('@/assets/tools/chrome.svg?raw')
       },
       {
-        name: 'Firefox',
+        name: 'Edge',
         description: 'Browser',
-        href: 'https://www.mozilla.org/en-US/firefox',
-        icon: import('@/assets/tools/firefox.svg?raw')
+        href: 'https://www.microsoft.com/edge',
+        icon: import('@/assets/tools/edge.svg?raw')
       },
       {
         name: 'Notion',
@@ -102,7 +99,7 @@ const headings = [
   />
   <ToolSection
     class='mb-5'
-    title='Development'
+    title='开发工具'
     tools={[
       {
         name: 'VS Code',
@@ -111,40 +108,22 @@ const headings = [
         icon: import('@/assets/tools/vscode.svg?raw')
       },
       {
-        name: 'Neovim',
+        name: 'Trae',
         description: 'IDE',
-        href: 'https://neovim.io/',
-        icon: import('@/assets/tools/neovim.svg?raw')
-      },
-      {
-        name: 'Sublime Text',
-        description: 'IDE',
-        href: 'https://www.sublimetext.com/',
-        icon: import('@/assets/tools/sublime.svg?raw')
+        href: 'https://trae.ai/',
+        icon: import('@/assets/tools/trae.svg?raw')
       }
     ]}
   />
   <ToolSection
     class='mb-5'
-    title='Environment'
+    title='环境'
     tools={[
       {
-        name: 'Arch Linux',
-        description: 'Linux Distribution',
-        href: 'https://archlinux.org/',
-        icon: import('@/assets/tools/archlinux.svg?raw')
-      },
-      {
-        name: 'Ubuntu 24.04 LTS',
-        description: 'Linux Distribution',
-        href: 'https://ubuntu.com/',
-        icon: import('@/assets/tools/ubuntu.svg?raw')
-      },
-      {
-        name: 'MacOS Tahoe',
-        description: 'MacBook Air',
-        href: 'https://www.apple.com/macos/',
-        icon: import('@/assets/tools/apple.svg?raw')
+        name: 'Debian 12.9',
+        description: 'Aliyun Server',
+        href: 'https://www.debian.org/',
+        icon: import('@/assets/tools/debian.svg?raw')
       },
       {
         name: 'Windows 11',
@@ -156,47 +135,30 @@ const headings = [
   />
 
   {/* social-networks */}
-  <h2 id='social-networks'>Social Networks</h2>
+  <h2 id='social-networks'>社交网络</h2>
   <p>
-    Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione indoctum
-    dissentiunt, cu meliore fuisset mei, vel quod voluptua ne.
+    欢迎关注我的社交网络，与我互动、分享经验、交流知识。
   </p>
   <Substats
     stats={[
       {
         platform: 'GitHub',
         icon: 'github',
-        link: 'https://github.com/cworld1',
+        link: 'https://github.com/ljxme',
         text: 'followers',
-        api: 'github/cworld1'
+        api: 'github/ljxme'
       },
       {
         platform: 'Telegram',
         icon: 'telegram',
         color: '#2ca5e0',
-        link: 'https://t.me/cworld0_cn',
+        link: 'https://t.me/lixme',
         text: 'subscribers',
-        api: 'telegram/cworld0_cn'
+        api: 'telegram/lixme'
       },
-      {
-        platform: 'Weibo',
-        icon: 'weibo',
-        color: '#e71f19',
-        link: 'https://weibo.com/cworld0',
-        text: 'followers',
-        api: 'weibo/5501674056'
-      },
-      {
-        platform: 'Steam',
-        icon: 'steam',
-        color: '#50769d',
-        link: 'https://steamcommunity.com/id/cworld',
-        text: 'games',
-        api: 'steamgames/76561199021278120'
-      }
     ]}
   />
-
+  <!--
   {/* gossips */}
   <h2 id='gossips'>Gossips</h2>
   <Collapse title='Lorem ipsum'>
@@ -204,21 +166,21 @@ const headings = [
     dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel, at eum oratio
     possit voluptatum.
   </Collapse>
-
+  -->
   {/* about-blog */}
-  <h2 id='about-blog'>About Blog</h2>
-  <p>Website history:</p>
+  <h2 id='about-blog'>关于博客</h2>
+  <p>建站碎笔：</p>
   <Timeline
     events={[
       {
-        date: '2024-04-29',
+        date: '2025-10-08',
         content:
-          'Website refactored using <a href="https://astro.build/" target="_blank">Astro</a> and <a href="https://github.com/srleom/astro-theme-resume" target="_blank">Astro Theme Resume</a>'
+          '在阿里云注册域名 <b>ljx.icu</b> 并选择 <a href="https://astro.build/" target="_blank">Astro</a> 作为框架，<a href="https://github.com/cworld1/astro-theme-pure" target="_blank">Astro Theme Pure</a> 作为主题，开始逐渐迁移博客到阿里云服务器。'
       },
       {
-        date: '2024-07-26',
+        date: '2024-08-26',
         content:
-          'Website abstracted as a theme and published on <a href="https://github.com/cworld1/astro-theme-pure"target="_blank">Github</a>'
+          '在 <a href="https://github.com/cworld1/astro-theme-pure"target="_blank">namesilo</a> 注册域名 <b>artemisia.icu</b> '
       },
       {
         date: '2024-07-27',
@@ -227,31 +189,32 @@ const headings = [
     ]}
   />
   <p>
-    The smooth operation and personalized customization of website also rely on the resources and
-    technical support provided by the following excellent projects/service providers:
+    网站的顺畅运行和个性化定制也依赖于以下优秀项目/服务提供商提供的资源和技术支持：
   </p>
   <ul>
-    <li>Domain: <a href='#' target='_blank'>Vercel</a></li>
+    <li>域名 & 服务器: <a href='https://www.aliyun.com/' target='_blank'>Aliyun</a></li>
     <li>
-      Framework & Theme: <a href='https://astro.build/' target='_blank'>Astro</a> + <a
+      框架 & 主题: <a href='https://astro.build/' target='_blank'>Astro</a> + <a
         href='https://github.com/cworld1/astro-theme-pure'
         target='_blank'>Astro Theme Pure</a
       >
     </li>
     <li>
-      Site hosting: <a href='https://vercel.com/' target='_blank'>Vercel</a>
+      安全保障: <a href='https://www.1panel.cn/' target='_blank'>1Panel</a>
     </li>
+    <!--
     <li>
       CI/CD: <a href='https://vercel.com/workflow' target='_blank'>Vercel Workflow</a>
     </li>
+    -->
     <!-- <li>Resources speedup: <a href='https://cdn.cbd.int/' target='_blank'>CBD CDN</a></li> -->
-    <li>Comment system: <a href='https://waline.js.org' target='_blank'>Waline</a></li>
+    <li>评论系统: <a href='https://waline.js.org' target='_blank'>Waline</a></li>
     <li>
-      Visits: <a href='https://supabase.com/' target='_blank'>Supabase</a> +
+      访问统计: <a href='https://supabase.com/' target='_blank'>Supabase</a> +
       <a href='https://waline.js.org/' target='_blank'>Waline</a>
     </li>
     <li>
-      Other statistics: <a href='https://github.com/spencerwooo/substats' target='_blank'
+      其他统计: <a href='https://github.com/spencerwooo/substats' target='_blank'
         >Substats</a
       >
     </li>
