@@ -6,6 +6,9 @@ on:
       - main  # 当 main 分支有更新时触发构建
   workflow_dispatch:  # 支持手动触发
 
+permissions:
+  contents: write  # 👈 允许推送到仓库分支
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
