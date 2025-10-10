@@ -63,5 +63,5 @@ jobs:
 
           echo "🌐 同步到 CNB 仓库"
           git branch -M main
-          git remote add origin "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/Liiiu/Blog.git"
+          git remote add origin "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/ljxme/lisblogsourcecode.git"
           git push --force --quiet origin main
