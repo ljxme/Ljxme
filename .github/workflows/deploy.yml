@@ -1,67 +1,76 @@
-name: Build and Deploy (Astro + CNB)
+name: 🚀 Build & Deploy Astro Blog
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
-
-permissions:
-  contents: write
+      - main  # 当 main 分支有更新时触发构建
+  workflow_dispatch:  # 支持手动触发
 
 jobs:
-  build-and-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ 检出仓库代码
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ 设置 Node 环境
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
+      # 3️⃣ 安装依赖
       - name: Install dependencies
         run: npm ci
 
+      # 4️⃣ 删除旧的构建产物（防止残留）
       - name: Clean old build
-        run: rm -rf ./dist
+        run: rm -rf dist
 
-      - name: Build project
+      # 5️⃣ 构建 Astro 静态文件
+      - name: Build Astro project
         run: npm run build
 
-      - name: Deploy to GitHub Pages & CNB
-        env:
-          GH_ACTOR: ${{ github.actor }}
-          GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CNB_USERNAME: ${{ secrets.CNB_USERNAME }}
-          CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-          COMMIT_HASH: ${{ github.sha }}
+      # 6️⃣ 部署到 page 分支（GitHub Pages 或静态仓库）
+      - name: Deploy to page branch
         run: |
-          cd ./dist
+          cd dist
           git init
-
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-
-          BUILD_TIME=$(date '+%Y-%m-%d %H:%M:%S')
-          SHORT_HASH=$(echo "$COMMIT_HASH" | cut -c1-7)
-          COMMIT_URL="https://github.com/${GH_REPO}/commit/${COMMIT_HASH}"
-
-          # 用 printf 正确生成多行 commit message
-          MESSAGE=$(printf "Deploy from GitHub: \"%s\"\nSource commit: %s (%s)\nBuilt at: %s" \
-            "$COMMIT_MESSAGE" "$SHORT_HASH" "$COMMIT_URL" "$BUILD_TIME")
-
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
           git add .
-          git commit -m "$MESSAGE"
+          git commit -m "${{ github.event.head_commit.message }} ==> [$(date +"%Y-%m-%d %H:%M:%S")]"
+          git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:page
 
-          echo "🚀 推送到 GitHub Pages 分支(page)"
-          git push --force --quiet "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${GH_REPO}.git" master:page
-
-          echo "🌐 同步到 CNB 仓库"
+      # 7️⃣ 同步到 CNB 仓库（带 GitHub commit 信息）
+      - name: 🌐 Sync to CNB repository
+        run: |
+          cd dist
           git branch -M main
-          git remote add origin "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/ljxme/lisblogsourcecode.git"
-          git push --force --quiet origin main
+          git remote add cnb "https://${{ secrets.CNB_USERNAME }}:${{ secrets.CNB_TOKEN }}@cnb.cool/ljxme/lisblogsourcecode.git"
+          git fetch cnb || true
+          # 获取当前 GitHub 提交信息
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          GITHUB_COMMIT_URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          git commit --allow-empty -m "🔄 Sync from GitHub: ${COMMIT_MSG}\n🔗 ${GITHUB_COMMIT_URL}"
+          git push --force --quiet cnb main
+
+      # 8️⃣ SSH 登录服务器并执行拉取
+      - name: 🔧 SSH Deploy to Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /opt/1panel/www/sites/myblog/index/
+            git config --global --add safe.directory "$(pwd)"
+            git fetch --all --depth=1
+            git reset --hard origin/main
+            git pull --depth=1
+            echo "✅ 已拉取 page 分支最新内容"
