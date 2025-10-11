@@ -7,19 +7,19 @@
         {
           "name": "Arthals' ink",
           "intro": "所见高山远木，阔云流风；所幸岁月盈余，了无拘束",
-          "link": "https://arthals.ink/",
+          "link": "https://arthals.ink",
           "avatar": "https://cdn.arthals.ink/Arthals.png"
         },
         {
           "name": "CWorld Site",
           "intro": "求知若愚，虚怀若谷",
-          "link": "https://cworld0.com/",
+          "link": "https://cworld0.com",
           "avatar": "https://cravatar.cn/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200"
         },
         {
           "name": "温锦瑜的博客",
           "intro": "先想想为什么，再考虑怎么做",
-          "link": "https://www.wenjinyu.me/",
+          "link": "https://www.wenjinyu.me",
           "avatar": "https://sso.wenjinyu.me/public/favicon.png"
         },
         {
@@ -31,13 +31,13 @@
         {
           "name": "FKUN",
           "intro": "F君のBLOGへようこそ！",
-          "link": "https://blog.fkun.tech/",
+          "link": "https://blog.fkun.tech",
           "avatar": "https://fkun.tech/images/avatar.png"
         },
         {
           "name": "Zeruns's Blog",
           "intro": "爱折腾软件和硬件的技术宅",
-          "link": "https://blog.zeruns.com/",
+          "link": "https://blog.zeruns.com",
           "avatar": "https://blog.zeruns.com/tx.jpg"
         }
       ]
