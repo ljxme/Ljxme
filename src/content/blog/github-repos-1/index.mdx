@@ -1,0 +1,228 @@
+---
+title: 'GitHub有趣项目推荐（一）'
+description: '分享一些有趣的GitHub项目'
+publishDate: '2025-09-15'
+heroImage: { src: './cover.jpg', alt: 'an image targetting my article', color: '#B4C6DA' }
+tags:
+  - 推荐
+  - GitHub
+comment: true
+language: '中文'
+---
+
+# 总览项目
+
+## 1.生活类
+
+- CookLikeHOC：像老乡鸡那样做饭，🥢像老乡鸡🐔那样做饭。主要部分于2024年完工，非老乡鸡官方仓库。文字来自《老乡鸡菜品溯源报告》，并做归纳、编辑与整理。
+
+## 2.工具类
+
+- PicSite：PicSite是一个使用Next.js构建的在线图片展示网站。它允许用户浏览相册、查看图片，并提供了简单的搜索功能。
+- CloudFlare-ImgBed：开源文件托管解决方案，支持Docker和无服务器部署，支持 TelegramBot、CloudflareR2、S3等多种存储渠道，支持WebDAV协议和多种RESTful API。
+- Docker-Cloudflare：🚀基于CloudflareWorkers的Docker镜像代理服务。
+- Xget：超高性能、安全的一站式开发者资源访问加速引擎。其性能远超传统加速器，为您提供跨多个平台的统一高效的加速体验，涵盖代码储存库、包管理、AI 推理 API、容器镜像、模型及数据集等。
+
+# 使用项目
+
+## 生活类
+
+### CookLikeHOC
+
+[GitHub - Gar-b-age/CookLikeHOC: 🥢像老乡鸡🐔那样做饭。主要部分于2024年完工，非老乡鸡官方仓库。文字来自《老乡鸡菜品溯源报告》，并做归纳、编辑与整理。CookLikeHOC.](https://github.com/Gar-b-age/CookLikeHOC)
+
+**介绍：**一个整理自[《老乡鸡菜品溯源报告》](https://www.lxjchina.com.cn/display.asp?id=4226)的开源食谱
+
+**使用：**详见官方网址https://cooklikehoc.soilzhu.su/
+
+## 工具类
+
+### PicSite
+
+[GitHub - Gloridust/picsite: 在线展示你的相册，让你的作品被他人看到｜Display your albums online.](https://github.com/Gloridust/picsite)
+
+**介绍：**该项目是我在寻找自建博客相册时发现的，star虽然不高，但项目属于能用的（虽然有点小bug哈哈）
+
+**使用：**
+
+- bug修复：
+
+  在src/app/utils/albums.ts文件改动代码如下：
+
+  ```tsx
+  import fs from 'fs'
+  import path from 'path'
+  import matter from 'gray-matter'
+  import { Album } from '@/types/album'
+  
+  const albumsDirectory = path.join(process.cwd(), 'src/content/albums')
+  // 保证非法日期不会抛 RangeError
+  function safeISO(v: any) {
+    const d = new Date(v)
+    return Number.isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString()
+  }
+  
+  export function getAllAlbums(): Album[] {
+    const fileNames = fs.readdirSync(albumsDirectory)
+    return fileNames.map((fileName) => {
+      const id = fileName.replace(/\\.md$/, '')
+      const fullPath = path.join(albumsDirectory, fileName)
+      const fileContents = fs.readFileSync(fullPath, 'utf8')
+      const matterResult = matter(fileContents)
+  
+      const date = matterResult.data.date
+        ? safeISO(matterResult.data.date).split('T')[0]
+        : ''
+  
+      // 确保所有图片路径都以 '/' 开头
+      const images = matterResult.content
+        .split('\\n')
+        .filter(Boolean)
+        .map(line => {
+          const imagePath = line.trim().replace('- ', '')
+          return imagePath.startsWith('/') ? imagePath : `/${imagePath}`
+        })
+  
+      // 确保封面图片路径也以 '/' 开头
+      const coverImage = matterResult.data.coverImage
+        ? matterResult.data.coverImage.startsWith('/')
+          ? matterResult.data.coverImage
+          : `/${matterResult.data.coverImage}`
+        : ''
+  
+      return {
+        id,
+        name: matterResult.data.name || '',
+        date,
+        description: matterResult.data.description || '',
+        coverImage,
+        images,
+      }
+    })
+  }
+  
+  export function getAlbumById(id: string): Album | undefined {
+    const albums = getAllAlbums()
+    return albums.find(album => album.id === id)
+  }
+  
+  export function searchAlbums(query: string): Album[] {
+    const albums = getAllAlbums()
+    return albums.filter(album => 
+      album.name.toLowerCase().includes(query.toLowerCase()) ||
+      album.description.toLowerCase().includes(query.toLowerCase())
+    )
+  }
+  ```
+
+推荐用Vercel、Netlify、Zeabur、CloudFlarePages等托管平台进行一键部署
+
+**手动部署：**
+
+1. 克隆仓库：
+
+   ```bash
+   git clone <https://github.com/Gloridust/picsite.git>
+   cd picsite
+   ```
+
+2. 安装依赖：
+
+   ```bash
+   npm install
+   ```
+
+3. 本地调试：
+
+   ```bash
+   npm run dev
+   ```
+
+4. 构建项目：
+
+   ```bash
+   npm run build
+   ```
+
+5. 启动生产服务器：
+
+   ```bash
+   npm start
+   ```
+
+   现在，您可以通过 `http://localhost:3000` 访问您的网站。
+
+**添加相册及描述：**
+
+1. 在 `src/content/albums/` 目录下创建一个新的 Markdown 文件，例如 `nature.md`。
+
+2. 在文件的顶部添加 frontmatter，包括相册的元数据：
+
+   ```markdown
+   ---
+   id: nature
+   name: 自然风光
+   date: 2024-03-15
+   description: 美丽的自然风光摄影集
+   coverImage: images/nature/cover.jpg
+   ---
+   - images/nature/1.jpg
+   - images/nature/2.jpg
+   - images/nature/3.jpg
+   ```
+
+3. 在 `public/images/` 目录下创建对应的文件夹（例如 `nature`），并将图片文件放入其中。
+
+4. 确保 `coverImage` 路径和图片列表中的路径与实际文件位置相匹配。
+
+### CloudFlare-ImgBed
+
+[GitHub - MarSeventh/CloudFlare-ImgBed: Open-source file hosting solution based on CloudFlare  (Image hosting/File storage/Cloud drive) / 基于 CloudFlare 的开源文件托管解决方案（图床/文件床/网盘）](https://github.com/MarSeventh/CloudFlare-ImgBed)
+
+**介绍：**可用于自建博客图床
+
+**使用：**官方文档已经很详细了，我就不重复造轮子了🤓
+
+https://cfbed.sanyue.de/guide/introduction.html
+
+### Docker-Cloudflare
+
+[GitHub - niehaoran/docker-cloudflare: 基于cloudflare的加速改良](https://github.com/niehaoran/docker-cloudflare)
+
+**介绍：**基于Cloudflare Workers的Docker镜像代理服务，加速Docker。
+
+**使用：**
+
+1.登录[Cloudflare Dashboard](https://dash.cloudflare.com/)
+
+2.创建新的Worker
+
+3.复制`worker.js`代码并保存部署，代码如下：
+
+https://github.com/niehaoran/docker-cloudflare/blob/main/worker.js
+
+4.配置自定义域名
+
+### Xget
+
+[GitHub - xixu-me/Xget: 超高性能、安全的一站式开发者资源访问加速引擎。其性能远超传统加速器，为您提供跨多个平台的统一高效的加速体验，涵盖代码储存库、包管理、AI 推理 API、容器镜像、模型及数据集等 | Ultra-high-performance, secure, all-in-one acceleration engine for developer resource access. Its performance far exceeds that of traditional accelerators, providing you with a unified and efficient acceleration experience across multiple platforms](https://github.com/xixu-me/Xget)
+
+介绍：可以加速GitHub等一众国外资源的下载
+
+使用：这里给出CloudFlare自部署和浏览器插件的食用方法，其他方式详见https://github.com/xixu-me/Xget
+
+**CloudFlare自部署：**
+
+1. Fork该项目后直接在CloudFlare的Workers中部署
+2. 部署后，你的 Xget 服务将在`your-worker-name.your-subdomain.workers.dev`上可用
+3. 绑定自己的二级域名（可选）
+
+**浏览器插件：**
+
+1. 进入微软插件扩展商店[Microsoft Edge 加载项](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home)
+2. 搜索“Xget Now”安装
+3. 将Xget域名换成你自部署的域名（必填）
+
+# 项目总结
+
+> 这次分享了5个有趣的GitHub开源项目，分为生活类和工具类。生活类项目"CookLikeHOC"，一个基于《老乡鸡菜品溯源报告》整理的食谱。工具类项目包括"PicSite"在线图片展示网站、"CloudFlare-ImgBed"开源文件托管解决方案和"Docker-Cloudflare"Docker镜像代理服务，"Xget"多资源加速代理服务。对PicSite提供了bug修复方案，修改albums.ts文件以解决路径和日期问题
