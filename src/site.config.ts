@@ -117,6 +117,7 @@ export const integ: IntegrationUserConfig = {
   links: {
     // Friend logbook
     logbook: [
+      { date: '2025-10-17', content: " [青序栈] rejected" },
       { date: '2025-10-17', content: " [清羽飞扬] added" },
       { date: '2025-10-10', content: " [Shuoer's blog] added" },
       { date: '2025-10-09', content: " [温锦瑜的博客]、[Chancel's blog]、[FKUN]、[Zeruns's Blog] added" }
