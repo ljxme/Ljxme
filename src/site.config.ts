@@ -24,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: 'src/assets/avatar.png',
+    src: 'src/assets/avatar.webp',
     alt: 'Avatar'
   },
 
@@ -128,7 +128,7 @@ export const integ: IntegrationUserConfig = {
       { name: 'Name', val: "梨尽兴" },
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://blog.ljx.icu' },
-      { name: 'Avatar', val: 'https://blog.ljx.icu/favicon/avatar.png' }
+      { name: 'Avatar', val: 'https://blog.ljx.icu/avatar.png' }
     ]
   },
   // Enable page search function
