@@ -15,7 +15,7 @@ language: '中文'
 
 ## 起因
 
-浏览 [Waline的官方接口文档时](https://waline.js.org/reference/server/api.html) 发现通过 `/api/comment?type=recent` 接口能返回网站最新评论数据，于是“奴役”AI给我写了一个适用当前主题的评论展示组件，目前没出啥大差错🤣
+浏览 [Waline的官方接口文档](https://waline.js.org/reference/server/api.html) 时发现通过 `/api/comment?type=recent` 接口能返回网站最新评论数据，于是“奴役”AI给我写了一个适用当前主题的评论展示组件，目前没出啥大差错🤣
 
 ## 引入
 
@@ -52,7 +52,7 @@ interface WalineResponse {
  */
 export async function fetchRecentComments(limit: number = 5): Promise<WalineComment[]> {
   try {
-    const response = await fetch('https://waline.ljx.icu/api/comment?type=recent');
+    const response = await fetch('https://<Waline后端地址>/api/comment?type=recent');
     if (!response.ok) {
       throw new Error(`获取评论失败: ${response.status}`);
     }
