@@ -175,7 +175,7 @@ export const integ: IntegrationUserConfig = {
       comment: true,
       locale: {
         reaction0: 'Like',
-        placeholder: '欢迎留下评论~（邮箱用于接收回复，无需登录，评论经审核后可见）'
+        placeholder: '欢迎留下评论~（无需登录，评论经审核后可见）'
       },
       // imageUploader: false
     }
