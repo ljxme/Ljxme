@@ -77,7 +77,7 @@ function renderTalks() {
     };
 
     const fetchAndRenderTalks = () => {
-        const url = 'https://mm.ljx.icu/api/memo/list';
+        const url = 'https://mm.ljx.icu/api/echo/page';
         const cacheKey = 'talksCache';
         const cacheTimeKey = 'talksCacheTime';
         const cacheDuration = 30 * 60 * 1000; // 半个小时 (30 分钟)
