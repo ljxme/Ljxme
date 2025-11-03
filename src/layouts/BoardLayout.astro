@@ -41,13 +41,13 @@ const fullMeta: SiteMeta = {
   <main class='mt-6 w-full'>
     <!-- 页面头部 -->
     <header id='content-header' class='animate mb-8'>
-      <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl text-center'>
+      <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl '>
         {title}
       </h1>
       
       <!-- 页面信息（浏览量、评论等） -->
       {(view || enableComment) && (
-        <div class='flex justify-center mt-4'>
+        <div class='flex justify-start mt-4'>
           <PageInfo {view} comment={enableComment} class='italic text-muted-foreground' />
         </div>
       )}
