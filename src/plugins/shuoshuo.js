@@ -76,240 +76,163 @@ function renderTalks() {
         window.addEventListener ? window.addEventListener("resize", k) : document.body.onresize = k
     };
 
+
     const fetchAndRenderTalks = () => {
         const url = 'https://mm.ljx.icu/api/echo/page';
         const cacheKey = 'talksCache';
         const cacheTimeKey = 'talksCacheTime';
-        const cacheDuration = 30 * 60 * 1000; // 半个小时 (30 分钟)
-    
+        const cacheDuration = 30 * 60 * 1000;
         const cachedData = localStorage.getItem(cacheKey);
         const cachedTime = localStorage.getItem(cacheTimeKey);
-        const currentTime = new Date().getTime();
-    
-        // 判断缓存是否有效
-        if (cachedData && cachedTime && (currentTime - cachedTime < cacheDuration)) {
-            const data = JSON.parse(cachedData);
-            renderTalks(data); // 使用缓存渲染数据
+        const now = Date.now();
+
+        if (cachedData && cachedTime && (now - cachedTime < cacheDuration)) {
+            renderTalksList(JSON.parse(cachedData));
         } else {
-            if (talkContainer) {
-                talkContainer.innerHTML = '';
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            size: 30
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.code === 0 && data.data && Array.isArray(data.data.list)) {
-                            // 缓存数据
-                            localStorage.setItem(cacheKey, JSON.stringify(data.data.list));
-                            localStorage.setItem(cacheTimeKey, currentTime.toString());
-                            renderTalks(data.data.list); // 渲染数据
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                    });
-            }
-        }
-    
-        // 渲染函数
-        function renderTalks(list) {
-            // 确保 data 是一个数组
-            if (Array.isArray(list)) {
-                let items = list.map(item => formatTalk(item, url));
-                items.forEach(item => talkContainer.appendChild(generateTalkElement(item)));
-                waterfall('#talk');
-                // 应用瀑布流布局优化
-                setTimeout(() => {
-                    optimizeMasonryLayout();
-                    addResizeListener();
-                }, 100);
-            } else {
-                console.error('Data is not an array:', list);
-            }
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ page: 1, pageSize: 10 })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 1 && data.data && Array.isArray(data.data.items)) {
+                        localStorage.setItem(cacheKey, JSON.stringify(data.data.items));
+                        localStorage.setItem(cacheTimeKey, now.toString());
+                        renderTalksList(data.data.items);
+                    }
+                })
+                .catch(err => console.error('Error fetching:', err));
         }
     };
-    
 
-    const formatTalk = (item, url) => {
-        let date = formatTime(new Date(item.createdAt).toString());
-        let content = item.content;
-        let imgs = item.imgs ? item.imgs.split(',') : [];
-        let text = content;
-        content = text.replace(/\[(.*?)\]\((.*?)\)/g, `<a href="$2">@$1</a>`)
-            .replace(/- \[ \]/g, '⚪')
-            .replace(/- \[x\]/g, '⚫');
-        // 保留换行符，转换 \n 为 <br>
-		content = content.replace(/\n/g, '<br>');
-        // 将content用一个类包裹，便于后续处理
+    const renderTalksList = (list) => {
+        list.map(formatTalk).forEach(item => talkContainer.appendChild(generateTalkElement(item)));
+        waterfall('#talk');
+    };
+
+    const formatTalk = (item) => {
+        const date = formatTime(item.created_at);
+        let content = item.content || '';
+        content = content.replace(/\[(.*?)\]\((.*?)\)/g, `<a href="$2" target="_blank" rel="nofollow noopener">@$1</a>`)
+                         .replace(/- \[ \]/g, '⚪')
+                         .replace(/- \[x\]/g, '⚫')
+                         .replace(/\n/g, '<br>');
         content = `<div class="talk_content_text">${content}</div>`;
-        if (imgs.length > 0) {
+
+        // 图片
+        if (Array.isArray(item.images) && item.images.length > 0) {
             const imgDiv = document.createElement('div');
             imgDiv.className = 'zone_imgbox';
-            imgs.forEach(e => {
-                const imgLink = document.createElement('a');
-                imgLink.href = e;
-                imgLink.setAttribute('data-fancybox', 'gallery');
-                imgLink.className = 'fancybox';
-                imgLink.setAttribute('data-thumb', e);
+            item.images.forEach(img => {
+                const link = document.createElement('a');
+                link.href = img.image_url + "?fmt=webp&q=75";
+                link.setAttribute('data-fancybox', 'gallery');
+                link.className = 'fancybox';
                 const imgTag = document.createElement('img');
-                imgTag.src = e;
-                imgLink.appendChild(imgTag);
-                imgDiv.appendChild(imgLink);
+                imgTag.src = img.image_url + "?fmt=webp&q=75";
+                link.appendChild(imgTag);
+                imgDiv.appendChild(link);
             });
             content += imgDiv.outerHTML;
         }
 
-        // 外链分享功能
-        if (item.externalUrl) {
-            const externalUrl = item.externalUrl;
-            const externalTitle = item.externalTitle;
-            const externalFavicon = item.externalFavicon;
+        // 外链 / GitHub 项目
+        if (['WEBSITE', 'GITHUBPROJ'].includes(item.extension_type)) {
+            let siteUrl = '', title = '';
+            let extensionBack = "https://p.liiiu.cn/i/2024/07/27/66a4632bbf06e.webp";
 
-            const externalContainer = `
-            <div class="shuoshuo-external-link">
-                <a class="external-link" href="${externalUrl}" target="_blank" rel="external nofollow noopener noreferrer">
-                    <div class="external-link-left" style="background-image: url(${externalFavicon})"></div>
-                    <div class="external-link-right">
-                        <div class="external-link-title">${externalTitle}</div>
-                        <div>点击跳转<i class="fa-solid fa-angle-right"></i></div>
-                    </div>
-                </a>
-            </div>`;
+            // 解析 extension 字段
+            try {
+                const extObj = typeof item.extension === 'string' ? JSON.parse(item.extension) : item.extension;
+                siteUrl = extObj.site || extObj.url || item.extension;
+                title = extObj.title || siteUrl;
+            } catch {
+                siteUrl = item.extension;
+                title = siteUrl;
+            }
 
-            content += externalContainer;
-        }
+            // 特殊处理 GitHub 项目
+            if (item.extension_type === 'GITHUBPROJ') {
+                extensionBack = "https://p.liiiu.cn/i/2024/07/27/66a461a3098aa.webp";
 
-        const ext = JSON.parse(item.ext || '{}');
+                // 提取 GitHub 项目名
+                const match = siteUrl.match(/^https?:\/\/github\.com\/[^/]+\/([^/?#]+)/i);
+                if (match) {
+                    title = match[1]; // 获取仓库名
+                } else {
+                    // fallback：从最后一个路径段提取
+                    try {
+                        const parts = new URL(siteUrl).pathname.split('/').filter(Boolean);
+                        title = parts.pop() || siteUrl;
+                    } catch {
+                        // 如果 URL 无效则保留原始
+                    }
+                }
+            }
 
-        if (ext.music && ext.music.id) {
-            const music = ext.music;
-            const musicUrl = music.api.replace(':server', music.server)
-                .replace(':type', music.type)
-                .replace(':id', music.id);
+            // 输出 HTML 结构
             content += `
-            <meting-js server="${music.server}" type="${music.type}" id="${music.id}" api="${music.api}"></meting-js>
-        `;
-        }
-
-        if (ext.doubanMovie && ext.doubanMovie.id) {
-            const doubanMovie = ext.doubanMovie;
-            const doubanMovieUrl = doubanMovie.url;
-            const doubanTitle = doubanMovie.title;
-            // const doubanDesc = doubanMovie.desc || '暂无描述';
-            const doubanImage = doubanMovie.image;
-            const doubanDirector = doubanMovie.director || '未知导演';
-            const doubanRating = doubanMovie.rating || '暂无评分';
-            // const doubanReleaseDate = doubanMovie.releaseDate || '未知上映时间';
-            // const doubanActors = doubanMovie.actors || '未知演员';
-            const doubanRuntime = doubanMovie.runtime || '未知时长';
-
-            content += `
-                <a class="douban-card" href="${doubanMovieUrl}" target="_blank">
-                    <div class="douban-card-bgimg" style="background-image: url('${doubanImage}');"></div>
-                    <div class="douban-card-left">
-                        <div class="douban-card-img" style="background-image: url('${doubanImage}');"></div>
-                    </div>
-                    <div class="douban-card-right">
-                        <div class="douban-card-item"><span>电影名: </span><strong>${doubanTitle}</strong></div>
-                        <div class="douban-card-item"><span>导演: </span><span>${doubanDirector}</span></div>
-                        <div class="douban-card-item"><span>评分: </span><span>${doubanRating}</span></div>
-                        <div class="douban-card-item"><span>时长: </span><span>${doubanRuntime}</span></div>
-                    </div>
-                </a>
-            `;
-        }
-
-        if (ext.doubanBook && ext.doubanBook.id) {
-            const doubanBook = ext.doubanBook;
-            const bookUrl = doubanBook.url;
-            const bookTitle = doubanBook.title;
-            // const bookDesc = doubanBook.desc;
-            const bookImage = doubanBook.image;
-            const bookAuthor = doubanBook.author;
-            const bookRating = doubanBook.rating;
-            const bookPubDate = doubanBook.pubDate;
-
-            const bookTemplate = `
-                <a class="douban-card" href="${bookUrl}" target="_blank">
-                    <div class="douban-card-bgimg" style="background-image: url('${bookImage}');"></div>
-                        <div class="douban-card-left">
-                            <div class="douban-card-img" style="background-image: url('${bookImage}');"></div>
+                <div class="shuoshuo-external-link">
+                    <a class="external-link" href="${siteUrl}" target="_blank" rel="nofollow noopener">
+                        <div class="external-link-left" style="background-image:url(${extensionBack})"></div>
+                        <div class="external-link-right">
+                            <div class="external-link-title">${title}</div>
+                            <div>点击跳转<i class="fa-solid fa-angle-right"></i></div>
                         </div>
-                        <div class="douban-card-right">
-                            <div class="douban-card-item">
-                                <span>书名: </span><strong>${bookTitle}</strong>
-                            </div>
-                            <div class="douban-card-item">
-                                <span>作者: </span><span>${bookAuthor}</span>
-                            </div>
-                            <div class="douban-card-item">
-                                <span>出版年份: </span><span>${bookPubDate}</span>
-                            </div>
-                            <div class="douban-card-item">
-                                <span>评分: </span><span>${bookRating}</span>
-                            </div>
-                        </div>
-                </a>
-            `;
-
-            content += bookTemplate;
+                    </a>
+                </div>`;
         }
 
-        if (ext.video && ext.video.type) {
-            const videoType = ext.video.type;
-            const videoUrl = ext.video.value;
-            if (videoType === 'bilibili') {
-                // Bilibili 视频模板
-                // 从形如https://www.bilibili.com/video/BV1VGAPeAEMQ/?vd_source=91b3158d27d98ff41f842508c3794a13 的链接中提取视频 BV1VGAPeAEMQ
-                const biliTemplate = `
-                <div style="position: relative; padding: 30% 45%; margin-top: 10px;">
-                    <iframe 
-                        style="position: absolute; width: 100%; height: 100%; left: 0; top: 0; border-radius: 12px;" 
-                        src="${videoUrl}&autoplay=0"
-                        scrolling="no" 
-                        frameborder="no" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            `;
-                // 将模板插入到 DOM 中
-                content += biliTemplate;
 
-            } else if (videoType === 'youtube') {
-                // YouTube 视频模板
-                // 从形如https://youtu.be/2V6lvCUPT8I?si=DVhUas6l6qlAr6Ru的链接中提取视频 ID2V6lvCUPT8I
-                const youtubeTemplate = `
-                <div style="position: relative; padding: 30% 45%; margin-top: 10px;">
-                    <iframe width="100%"
-                        style="position: absolute; width: 100%; height: 100%; left: 0; top: 0; border-radius: 12px;"
-                        src="${videoUrl}"
-                        title="YouTube video player" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            `;
-                // 将模板插入到 DOM 中
-                content += youtubeTemplate;
+        // 音乐
+        if (item.extension_type === 'MUSIC' && item.extension) {
+            const link = item.extension;
+            let server = '';
+            if (link.includes('music.163.com')) server = 'netease';
+            else if (link.includes('y.qq.com')) server = 'tencent';
+            const idMatch = link.match(/id=(\d+)/);
+            const id = idMatch ? idMatch[1] : '';
+            if (server && id) {
+                content += `<meting-js server="${server}" type="song" id="${id}" api="https://met.liiiu.cn/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r"></meting-js>`;
+            }
+        }
+
+        // 视频
+        if (item.extension_type === 'VIDEO' && item.extension) {
+            const video = item.extension;
+            if (video.startsWith('BV')) {
+                const bilibiliUrl = `https://www.bilibili.com/blackboard/html5mobileplayer.html?bvid=${video}&as_wide=1&high_quality=1&danmaku=0`;
+                content += `
+                    <div style="position: relative; padding: 30% 45%; margin-top: 10px;">
+                        <iframe style="position:absolute;width:100%;height:100%;left:0;top:0;border-radius:12px;" 
+                                src="${bilibiliUrl}" 
+                                frameborder="no" 
+                                allowfullscreen="true" 
+                                loading="lazy"></iframe>
+                    </div>`;
+            } else {
+                const youtubeUrl = `https://www.youtube.com/embed/${video}`;
+                content += `
+                    <div style="position: relative; padding: 30% 45%; margin-top: 10px;">
+                        <iframe style="position:absolute;width:100%;height:100%;left:0;top:0;border-radius:12px;" 
+                                src="${youtubeUrl}" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen></iframe>
+                    </div>`;
             }
         }
 
         return {
-            content: content,
-            user: item.user.nickname || '匿名',
-            avatar: item.user.avatarUrl || 'https://p.liiiu.cn/i/2024/03/29/66061417537af.png',
-            date: date,
-            location: item.location || '陕西西安',
-            tags: item.tags ? item.tags.split(',').filter(tag => tag.trim() !== '') : ['无标签'],
-            text: content.replace(/\[(.*?)\]\((.*?)\)/g, '[链接]' + `${imgs.length ? '[图片]' : ''}`)
+            content,
+            user: item.username || '匿名',
+            avatar: 'https://tc.ljx.icu/file/imgs/leQV3mP6.png',
+            date,
+            location: '',
+            tags: Array.isArray(item.tags) && item.tags.length ? item.tags.map(t => t.name) : ['无标签'],
+            text: content.replace(/\[(.*?)\]\((.*?)\)/g, '[链接]')
         };
     };
 
@@ -319,21 +242,22 @@ function renderTalks() {
 
         const talkMeta = document.createElement('div');
         talkMeta.className = 'talk_meta';
-
         const avatar = document.createElement('img');
         avatar.className = 'no-lightbox avatar';
         avatar.src = item.avatar;
 
         const info = document.createElement('div');
         info.className = 'info';
-
-        const talkNick = document.createElement('span');
-        talkNick.className = 'talk_nick';
-        talkNick.innerHTML = `${item.user} ${generateIconSVG()}`;
-
-        const talkDate = document.createElement('span');
-        talkDate.className = 'talk_date';
-        talkDate.textContent = item.date;
+        const nick = document.createElement('span');
+        nick.className = 'talk_nick';
+        nick.innerHTML = `${item.user} ${generateIconSVG()}`;
+        const date = document.createElement('span');
+        date.className = 'talk_date';
+        date.textContent = item.date;
+        info.appendChild(nick);
+        info.appendChild(date);
+        talkMeta.appendChild(avatar);
+        talkMeta.appendChild(info);
 
         const talkContent = document.createElement('div');
         talkContent.className = 'talk_content';
@@ -341,181 +265,52 @@ function renderTalks() {
 
         const talkBottom = document.createElement('div');
         talkBottom.className = 'talk_bottom';
-
-        const TagContainer = document.createElement('div');
-
-        const talkTag = document.createElement('span');
-        talkTag.className = 'talk_tag';
-        talkTag.textContent = `🏷️${item.tags}`;
-
-        const locationTag = document.createElement('span');
-        locationTag.className = 'location_tag';
-        locationTag.textContent = `🌍${item.location}`;
-
-        TagContainer.appendChild(talkTag);
-        TagContainer.appendChild(locationTag);
+        const tags = document.createElement('div');
+        const tag = document.createElement('span');
+        tag.className = 'talk_tag';
+        tag.textContent = `🏷️${item.tags}`;
+        //const loc = document.createElement('span');
+        //loc.className = 'location_tag';
+        //loc.textContent = `🌍${item.location}`;
+        tags.appendChild(tag);
+        //tags.appendChild(loc);
 
         const commentLink = document.createElement('a');
         commentLink.href = 'javascript:;';
         commentLink.onclick = () => goComment(item.text);
-        const commentIcon = document.createElement('span');
-        commentIcon.className = 'icon';
-        const commentIconInner = document.createElement('i');
-        commentIconInner.className = 'fa-solid fa-message fa-fw';
-        commentIcon.appendChild(commentIconInner);
-        commentLink.appendChild(commentIcon);
+        const icon = document.createElement('span');
+        icon.className = 'icon';
+        icon.innerHTML = '<i class="fa-solid fa-message fa-fw"></i>';
+        commentLink.appendChild(icon);
 
-        talkMeta.appendChild(avatar);
-        info.appendChild(talkNick);
-        info.appendChild(talkDate);
-        talkMeta.appendChild(info);
+        talkBottom.appendChild(tags);
+        talkBottom.appendChild(commentLink);
+
         talkItem.appendChild(talkMeta);
         talkItem.appendChild(talkContent);
-        talkBottom.appendChild(TagContainer);
-        talkBottom.appendChild(commentLink);
         talkItem.appendChild(talkBottom);
 
         return talkItem;
     };
 
-    /**
-     * 瀑布流布局优化函数
-     * 根据内容长度动态调整卡片排列
-     */
-    const optimizeMasonryLayout = () => {
-        const container = document.getElementById('talk');
-        const items = container.querySelectorAll('.talk_item');
-        
-        if (items.length === 0) return;
-
-        // 等待所有图片加载完成后再进行布局优化
-        const images = container.querySelectorAll('img');
-        let loadedImages = 0;
-        
-        const checkLayout = () => {
-            loadedImages++;
-            if (loadedImages >= images.length) {
-                performLayout();
-            }
-        };
-
-        const performLayout = () => {
-            // 检测是否支持 CSS Grid
-            if (CSS.supports('display', 'grid')) {
-                // 使用 CSS Grid 的 masonry 特性（如果浏览器支持）
-                if (CSS.supports('grid-template-rows', 'masonry')) {
-                    container.style.gridTemplateRows = 'masonry';
-                } else {
-                    // 降级方案：使用 JavaScript 模拟瀑布流
-                    simulateMasonryLayout(container, items);
-                }
-            }
-        };
-
-        // 为每个图片添加加载监听器
-        if (images.length > 0) {
-            images.forEach(img => {
-                if (img.complete) {
-                    checkLayout();
-                } else {
-                    img.addEventListener('load', checkLayout);
-                    img.addEventListener('error', checkLayout);
-                }
-            });
-        } else {
-            performLayout();
-        }
-    };
-
-    /**
-     * JavaScript 模拟瀑布流布局
-     */
-    const simulateMasonryLayout = (container, items) => {
-        // 获取容器宽度和列数
-        const containerWidth = container.offsetWidth;
-        const itemWidth = 300; // 最小卡片宽度
-        const gap = 16; // 间距
-        const columns = Math.floor((containerWidth + gap) / (itemWidth + gap));
-        
-        if (columns <= 1) return; // 单列时不需要特殊处理
-
-        // 创建列高度数组
-        const columnHeights = new Array(columns).fill(0);
-        
-        items.forEach((item, index) => {
-            // 找到最短的列
-            const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
-            
-            // 计算位置
-            const x = shortestColumnIndex * (itemWidth + gap);
-            const y = columnHeights[shortestColumnIndex];
-            
-            // 设置绝对定位
-            item.style.position = 'absolute';
-            item.style.left = `${x}px`;
-            item.style.top = `${y}px`;
-            item.style.width = `${itemWidth}px`;
-            
-            // 更新列高度
-            columnHeights[shortestColumnIndex] += item.offsetHeight + gap;
-        });
-        
-        // 设置容器高度
-        const maxHeight = Math.max(...columnHeights);
-        container.style.height = `${maxHeight}px`;
-        container.style.position = 'relative';
-    };
-
-    /**
-     * 添加窗口大小变化监听器
-     * 确保布局在响应式变化时能够重新优化
-     */
-    const addResizeListener = () => {
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                optimizeMasonryLayout();
-            }, 250);
-        });
-    };
-
     const goComment = (e) => {
         const match = e.match(/<div class="talk_content_text">([\s\S]*?)<\/div>/);
         const textContent = match ? match[1] : "";
-        const n = document.querySelector(".wl-editor");
-        if (n) {
-            n.value = `> ${textContent}\n\n`;
-            n.focus();
-            // 使用类似友链页面的提示机制
-            document.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: '已为您引用该说说，不删除空格效果更佳 ✨'
-                }
-            }));
-        } else {
-            // 如果找不到评论输入框，也显示提示
-            document.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: '未找到评论输入框，请确保页面已完全加载 ⚠️'
-                }
-            }));
-        }
+        const textarea = document.querySelector(".wl-editor");
+        textarea.value = `> ${textContent}\n\n`;
+        textarea.focus();
+        // 使用类似友链页面的提示机制
+        document.dispatchEvent(new CustomEvent('toast', {
+            detail: {
+                message: '已为您引用该说说，不删除空格效果更佳 ✨'
+            }
+        }));
     };
-    
 
     const formatTime = (time) => {
         const d = new Date(time);
-        const ls = [
-            d.getFullYear(),
-            d.getMonth() + 1,
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-            d.getSeconds(),
-        ];
-        const r = ls.map((a) => (a.toString().length === 1 ? '0' + a : a));
-        return `${r[0]}-${r[1]}-${r[2]} ${r[3]}:${r[4]}`;
+        const pad = (n) => n.toString().padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
     };
 
     fetchAndRenderTalks();

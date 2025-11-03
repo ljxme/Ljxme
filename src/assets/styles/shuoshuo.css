@@ -1,79 +1,87 @@
 /* eslint-disable */
 :root {
-    --liushen-card-bg: hsl(var(--background));
-    --liushen-card-border: 1px solid hsl(var(--border) / 0.8);
-    --card-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    --card-hover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --liushen-card-secondbg: hsl(var(--muted) / 0.5);
-    --liushen-button-hover-bg: hsl(var(--primary));
-    --liushen-text: hsl(var(--foreground));
-    --liushen-button-bg: hsl(var(--primary) / 0.1);
-    --liushen-fancybox-bg: hsl(var(--background) / 0.8);
+    --liushen-card-bg: #fff;
+    --liushen-card-border: 1px solid rgba(194, 166, 97, 0.15);
+    --card-box-shadow: 0 4px 10px rgba(194, 166, 97, 0.08);
+    --card-hover-box-shadow: 0 6px 12px rgba(194, 166, 97, 0.15);
+    --liushen-card-secondbg: rgba(194, 166, 97, 0.05);
+    --liushen-button-hover-bg: #C2A661;
+    --liushen-text: #4c4948;
+    --liushen-button-bg: rgba(194, 166, 97, 0.08);
+    --liushen-fancybox-bg: rgba(255, 255, 255, 0.7);
+    --liushen-link-color: #C2A661;
+    --liushen-link-hover-color: #EEDC82;
 }
 
-:root, [data-theme=dark] {
-    --liushen-card-bg: hsl(var(--background));
-    --liushen-card-secondbg: hsl(var(--muted) / 0.5);
-    --liushen-card-border: 1px solid hsl(var(--border) / 0.8);
-    --card-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    --card-hover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --liushen-button-bg: hsl(var(--muted));
-    --liushen-button-hover-bg: hsl(var(--primary));
-    --liushen-text: hsl(var(--foreground));
-    --liushen-fancybox-bg: hsl(var(--background) / 0.8);
+html.dark, [data-theme=dark] {
+    --liushen-card-bg: #1a1a1a;
+    --liushen-card-secondbg: rgba(0, 102, 204, 0.1);
+    --liushen-card-border: 1px solid rgba(0, 102, 204, 0.2);
+    --card-box-shadow: 0 4px 10px rgba(0, 102, 204, 0.1);
+    --card-hover-box-shadow: 0 6px 12px rgba(0, 102, 204, 0.2);
+    --liushen-button-bg: rgba(0, 102, 204, 0.15);
+    --liushen-button-hover-bg: #0066cc;
+    --liushen-text: rgba(255, 255, 255, 0.8);
+    --liushen-fancybox-bg: rgba(0, 0, 0, 0.7);
+    --liushen-link-color: #3399ff;
+    --liushen-link-hover-color: #66b3ff;
+}
+
+/* 卡片初始化 */
+#talk .talk_item {
+    width: calc(33.333% - 6px);
+    background: var(--liushen-card-bg);
+    border: var(--liushen-card-border);
+    box-shadow: var(--card-box-shadow);
+    transition: all .3s ease-in-out;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 12px;
+    margin-right: 9px;
+    position: relative;
+    overflow: hidden;
+}
+#talk .talk_item:hover {
+    box-shadow: var(--card-hover-box-shadow);
+    transform: translateY(-3px);
+    border-color: rgba(194, 166, 97, 0.9);
+}
+
+@media (max-width: 900px) {
+    #talk .talk_item {
+      width: calc(50% - 5px);
+    }
+}
+@media (max-width: 450px) {
+    #talk .talk_item {
+      width: calc(100%);
+    }
 }
 
 #talk{
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    /* 使用 CSS Grid 瀑布流布局 */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    align-items: start;
-    /* 支持 CSS Grid Masonry（如果浏览器支持） */
-    grid-template-rows: masonry;
-}
-
-/* 卡片初始化 */
-#talk .talk_item {
-    background: var(--liushen-card-bg);
-    border: var(--liushen-card-border);
-    box-shadow: var(--card-box-shadow);
-    transition: all 0.3s ease;
-    border-radius: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    /* 移除固定宽度和边距，让 Grid 自动处理 */
-    width: 100%;
-    break-inside: avoid;
-}
-#talk .talk_item:hover {
-    box-shadow: var(--card-hover-box-shadow);
-    transform: translateY(-2px);
-}
-
-@media (max-width: 900px) {
-    #talk {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 0.75rem;
-    }
-}
-@media (max-width: 450px) {
-    #talk {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
 }
 
 #talk .talk_meta .avatar {
     margin: 0 !important;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.5rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    box-shadow: 0 3px 6px rgba(194, 166, 97, 0.85);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
+
+#talk .talk_meta .avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(238, 220, 130, 0.9);
+    border-color: rgba(194, 166, 97, 0.85);
+}
+
 #talk .talk_bottom,
 #talk .talk_meta {
     display: flex;
@@ -83,13 +91,13 @@
     display: flex;
     align-items: center;
     width: 100%;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid hsl(var(--border) / 0.6);
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(194, 166, 97, 0.85); /* 米黄色虚线边框 */
 }
 #talk .talk_bottom {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid hsl(var(--border) / 0.6);
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(194, 166, 97, 0.85); /* 米黄色虚线边框 */
     justify-content: space-between;
 }
 #talk .talk_meta .info {
@@ -98,18 +106,28 @@
     margin-left: 10px;
 }
 #talk .talk_meta .info .talk_nick {
-    color: #6dbdc3;
+    color: var(--liushen-link-color);
     font-size: 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+#talk .talk_meta .info .talk_nick:hover {
+    color: var(--liushen-link-hover-color);
+    text-shadow: 0 0 2px rgba(0, 102, 204, 0.2);
 }
 #talk .talk_meta .info svg.is-badge.icon {
     width: 15px;
     padding-top: 3px;
+    filter: drop-shadow(0 0 1px rgba(0, 102, 204, 0.3));
 }
 #talk .talk_meta .info span.talk_date {
-    opacity: .6;
+    opacity: .7;
+    font-size: 0.9rem;
+    color: var(--liushen-text);
 }
 #talk .talk_item .talk_content {
     margin-top: 10px;
+    line-height: 1.6;
 }
 #talk .talk_item .talk_content .zone_imgbox {
     display: flex;
@@ -124,6 +142,11 @@
     width: var(--w);
     aspect-ratio: 1/1;
     position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+#talk .talk_item .talk_content .zone_imgbox a:hover {
+    transform: scale(1.03);
 }
 #talk .talk_item .talk_content .zone_imgbox a:first-child {
     width: 100%;
@@ -135,6 +158,10 @@
     height: 100%;
     margin: 0 !important;
     object-fit: cover;
+    transition: transform 0.5s ease;
+}
+#talk .talk_item .talk_content .zone_imgbox img:hover {
+    transform: scale(1.05);
 }
 /* 底部 */
 #talk .talk_item .talk_bottom {
@@ -143,17 +170,10 @@
 #talk .talk_item .talk_bottom .icon {
     float: right;
     transition: all .3s;
-    background-color: var(--liushen-button-bg);
-    padding: 8px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
 }
 #talk .talk_item .talk_bottom .icon:hover {
-    color: white;
-    background-color: var(--liushen-button-hover-bg);
+    color: #0066cc;
+    transform: scale(1.2);
 }
 #talk .talk_item .talk_bottom span.talk_tag,
 #talk .talk_item .talk_bottom span.location_tag {
@@ -161,7 +181,7 @@
     background-color: var(--liushen-card-secondbg);
     border-radius: 12px;
     padding: 3px 15px 3px 10px;
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -171,15 +191,84 @@
 
 #talk .talk_item .talk_bottom span.talk_tag:hover,
 #talk .talk_item .talk_bottom span.location_tag:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    background-color: var(--liushen-button-hover-bg);
+    color: white;
 }
 #talk .talk_item .talk_content>a {
     margin: 0 3px;
-    color: #ff7d73 !important;
+    color: var(--liushen-link-color) !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0 2px;
 }
 #talk .talk_item .talk_content>a:hover{
     text-decoration: none !important;
-    color: #ff5143 !important
+    color: var(--liushen-link-hover-color) !important;
+    text-shadow: 0 0 1px rgba(0,102,204,0.3);
+}
+
+#talk .talk_item .talk_content>a:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--liushen-link-hover-color);
+    transition: width 0.3s ease;
+}
+
+#talk .talk_item .talk_content>a:hover:after {
+    width: 100%;
+}
+
+/* 外部链接样式 */
+.shuoshuo-external-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: var(--liushen-card-secondbg);
+    border-radius: 6px;
+    margin: 0 3px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 102, 204, 0.1);
+}
+
+.shuoshuo-external-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 102, 204, 0.2);
+    background: rgba(0, 102, 204, 0.15);
+}
+
+/* 提示样式 */
+.limit-notice {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    color: var(--liushen-text);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.limit-notice:before,
+.limit-notice:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.5), transparent);
+}
+
+.limit-notice:before {
+    left: 10%;
+}
+
+.limit-notice:after {
+    right: 10%;
 }
 
 @media screen and (max-width: 900px) {
@@ -217,56 +306,6 @@
     position: relative;
 }
 
-.douban-card .douban-card-bgimg {
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    filter: blur(15px) brightness(.6);
-    height: 115%;
-    position: absolute;
-    width: 115%;
-}
-
-.douban-card .douban-card-left {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.douban-card .douban-card-left .douban-card-img {
-    transition: all .5s ease;
-    height: 130px;
-    position: relative;
-    width: 80px;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 100%;
-}
-
-.douban-card .douban-card-left:hover .douban-card-img {
-    filter: blur(5px) brightness(.6);
-    transform: perspective(800px) rotateX(180deg);
-}
-
-.douban-card .douban-card-right {
-    color: #faebd7;
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-left: 12px;
-    position: relative;
-}
-
-.douban-card .douban-card-right .douban-card-item  {
-    margin-top: 4px;
-    max-width: 95%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 /* 外链卡片 */
 #talk .talk_item .talk_content .shuoshuo-external-link {
     /* 无下划线 */
@@ -277,11 +316,14 @@
     background-color: var(--liushen-card-secondbg);
     color: var(--liushen-card-text);
     border: var(--liushen-card-border);
-    transition: background-color .3s ease-in-out;    
+    transition: all .3s ease-in-out;    
+    overflow: hidden;
 }
 
 .shuoshuo-external-link:hover {
     background-color: var(--liushen-button-hover-bg);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .shuoshuo-external-link .external-link {
@@ -289,6 +331,7 @@
     color: var(--liushen-text) !important;
     width: 100%;
     height: 100%;
+    transition: all 0.3s ease;
 }
 
 .shuoshuo-external-link .external-link:hover {
@@ -306,6 +349,11 @@
     border-radius: 12px;
     background-size: cover;
     background-position: center;
+    transition: transform 0.3s ease;
+}
+
+.shuoshuo-external-link:hover .external-link-left {
+    transform: scale(1.05);
 }
 
 .shuoshuo-external-link .external-link-right {
@@ -322,14 +370,53 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: all 0.3s ease;
 }
 
 .shuoshuo-external-link .external-link-right i {
     margin-left: 5px;
+    transition: transform 0.3s ease;
 }
 
-.limit {
+.shuoshuo-external-link:hover .external-link-right i {
+    transform: translateX(3px);
+}
+
+/* 新的提示样式 */
+.limit-notice {
     width: 100%;
     text-align: center;
-    margin-top: 30px;
+    margin: 30px 0;
+    position: relative;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.limit-notice:before, .limit-notice:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(125,125,125,0.5));
+}
+
+.limit-notice:before {
+    left: 0;
+}
+
+.limit-notice:after {
+    right: 0;
+    background: linear-gradient(to left, transparent, rgba(125,125,125,0.5));
+}
+
+.limit-notice span {
+    background-color: var(--liushen-card-bg);
+    padding: 0 20px;
+    font-size: 0.9rem;
+    color: #888;
+    position: relative;
+    z-index: 1;
 }
