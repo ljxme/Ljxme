@@ -89,7 +89,7 @@ export const theme: ThemeUserConfig = {
     credits: true,
     /** Optional details about the social media accounts for this site. */
     social: { 
-      email: 'mailto:artemisia666@foxmail.com', 
+      email: 'mailto:me@ljx.icu', 
       github: 'https://github.com/ljxme',
       telegram: 'https://t.me/ljxme'
     }
@@ -128,7 +128,8 @@ export const integ: IntegrationUserConfig = {
       { name: 'Name', val: "梨尽兴" },
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://blog.ljx.icu' },
-      { name: 'Avatar', val: 'https://blog.ljx.icu/favicon.png' }
+      { name: 'Rss', val: 'https://blog.ljx.icu/rss.xml' },
+      { name: 'Avatar', val: 'https://blog.ljx.icu/favicon.png' },
     ]
   },
   // Enable page search function
