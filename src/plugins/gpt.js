@@ -233,7 +233,7 @@ var sparkLite = { // 重命名对象
 
         sparkLiteIsRunning = true; // 修改变量名
         const typingDelay = 25;
-        const waitingTime = 1000;
+        // const waitingTime = 1000;
         const punctuationDelayMultiplier = 6;
 
         element.style.display = "block";
