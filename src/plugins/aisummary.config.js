@@ -1,16 +1,34 @@
 /**
- * AISummary 前端配置
- * - aisummaryTypingAnimate：是否启用打字机动画（true 动画；false 直接渲染）
- * - aisummaryPostSelector：摘要容器插入的正文选择器（如 #content / .post-content）
- * - aisummaryWordLimit：提交给 API 的最大字数限制（后端/脚本参考）
- *
- * 说明：本文件作为普通脚本注入页面（非模块），使用 var 保持全局可见。
+ * AISummary 配置文件
+ * 说明：本文件作为普通脚本注入页面（非模块），使用 var 保持全局可见
  */
-// AI 摘要脚本配置（供脚本读取）：
+
+// AI 摘要脚本配置（供离线脚本读取）：
+// [AI_SUMMARY_API] 摘要服务地址
 // AI_SUMMARY_API=https://aisummary.ljx.icu/api/spark-proxy
+
+// [AI_SUMMARY_KEY] 摘要服务密钥
 // AI_SUMMARY_KEY=your-api-key
-// 说明：上面两行仅作为配置占位与注释，被离线脚本解析，不会在浏览器中使用。
+
+// [AISUMMARY_WORD_LIMIT] 提交与处理的最大字数
+// AISUMMARY_WORD_LIMIT=8000
+
+// [AISUMMARY_LOG_LEVEL] 运行日志等级
+// 0：仅错误（只输出失败与异常），不显示任何生成或处理信息
+// 1：信息级（输出正文裁剪、API 成功/失败、本地兜底与写入完成等）
+// 2：调试级（在 1 的基础上，额外输出处理范围与统计，如“跳过页面，仅处理文章目录”）
+// AISUMMARY_LOG_LEVEL=1
+
+// [AISUMMARY_CONCURRENCY] 并发处理数
+// 并发执行文章摘要生成任务（默认值：3；建议不高于 5，以避免 API 限流与本地资源过载）
+// AISUMMARY_CONCURRENCY=3
+
+// [AISUMMARY_CLEAN_BEFORE_API] 是否清洗提交给摘要服务的正文
+// 作用：调用 API 前去除 Markdown/代码块/HTML，仅保留纯文本；若服务希望原始 Markdown，请设为 false
+// AISUMMARY_CLEAN_BEFORE_API=false
+
+// 说明：以上为注释形式的键值配置，供离线脚本解析，不在浏览器中使用
+
 // AISummary 静态摘要配置：
 var aisummaryTypingAnimate = true; // true 开启打字机动画；false 直接渲染文本
 var aisummaryPostSelector = '#content'; // 文章内容容器选择器，例如 #article-container, .post-content
-var aisummaryWordLimit = 8000; // 提交给 API 的最大字数限制

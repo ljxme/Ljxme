@@ -19,6 +19,56 @@ const BLOG_DIR = path.join(ROOT, 'src', 'content', 'blog')
 const SUMMARY_MAX_LEN = 500
 
 /**
+ * 日志等级类型定义
+ * 0：仅错误；1：信息（生成与裁剪等）；2：调试（详细输出）
+ */
+type LogLevel = 0 | 1 | 2
+
+// 运行时日志等级（默认 1），由配置读取后在 run() 中设定
+let currentLogLevel: LogLevel = 1
+
+/**
+ * 是否在提交给摘要 API 前清洗正文的布尔开关。
+ * 读取顺序：优先 src/plugins/aisummary.config.js 注释键值，其次环境变量。
+ * 默认：false（不清洗）。
+ */
+function readCleanBeforeAPIFromCustom(): boolean | null {
+  const customPath = path.join(ROOT, 'src', 'plugins', 'aisummary.config.js')
+  if (!fs.existsSync(customPath)) return null
+  const content = fs.readFileSync(customPath, 'utf-8')
+  const m = content.match(/^[\t ]*\/\/\s*AISUMMARY_CLEAN_BEFORE_API\s*[:=]\s*(true|false|1|0)\s*$/mi)
+  if (!m) return null
+  const v = m[1].toLowerCase()
+  if (v === 'true' || v === '1') return true
+  if (v === 'false' || v === '0') return false
+  return null
+}
+
+/**
+ * 从环境变量读取是否清洗正文（AISUMMARY_CLEAN_BEFORE_API）。
+ * 支持：true/false/1/0/yes/no（不区分大小写）。
+ */
+function readCleanBeforeAPIFromEnv(): boolean | null {
+  const raw = (process.env.AISUMMARY_CLEAN_BEFORE_API || '').trim()
+  if (!raw) return null
+  const v = raw.toLowerCase()
+  if (['true', '1', 'yes', 'y'].includes(v)) return true
+  if (['false', '0', 'no', 'n'].includes(v)) return false
+  return null
+}
+
+/**
+ * 获取是否在提交 API 前清洗正文的最终布尔值，默认 false。
+ */
+function getCleanBeforeAPI(): boolean {
+  const v = readCleanBeforeAPIFromCustom()
+  if (v !== null) return v
+  const e = readCleanBeforeAPIFromEnv()
+  if (e !== null) return e
+  return false
+}
+
+/**
  * 判断字符串是否为纯 ASCII（避免在 HTTP 头中出现非 ASCII 导致 ByteString 报错）
  */
 function isASCII(str: string): boolean {
@@ -26,13 +76,13 @@ function isASCII(str: string): boolean {
 }
 
 /**
- * 从 src/plugins/custom.ts 的文件注释中读取 AI 摘要相关配置。
+ * 从 src/plugins/aisummary.config.js 的文件注释中读取 AI 摘要相关配置。
  * 格式示例：
  * // AI_SUMMARY_API=https://example.com/api/summary
  * // AI_SUMMARY_KEY=your-api-key
  */
 function readAIConfigFromCustom(): { api: string | null; key: string | null } {
-  const customPath = path.join(ROOT, 'src', 'plugins', 'custom.ts')
+  const customPath = path.join(ROOT, 'src', 'plugins', 'aisummary.config.js')
   if (!fs.existsSync(customPath)) {
     return { api: null, key: null }
   }
@@ -59,34 +109,138 @@ function readAIConfigFromCustom(): { api: string | null; key: string | null } {
 }
 
 /**
- * 从 custom.ts 中读取 sparkLite_wordLimit（变量声明）。
- * 支持格式：var sparkLite_wordLimit = 8000; 或带空格与分号。
+ * 从 aisummary.config.js 的注释配置中读取字数限制（AISUMMARY_WORD_LIMIT）。
+ * 支持格式：// AISUMMARY_WORD_LIMIT=8000 或 // AISUMMARY_WORD_LIMIT: 8000
  */
 function readWordLimitFromCustom(): number | null {
-  const customPath = path.join(ROOT, 'src', 'plugins', 'aisummary.config.ts')
+  const customPath = path.join(ROOT, 'src', 'plugins', 'aisummary.config.js')
   if (!fs.existsSync(customPath)) return null
   const content = fs.readFileSync(customPath, 'utf-8')
-  // 兼容旧变量名与新变量名
-  const m = content.match(/var\s+(?:aisummaryWordLimit|sparkLite_wordLimit)\s*=\s*([0-9]+)/)
+  const m = content.match(/^\s*\/\/\s*AISUMMARY_WORD_LIMIT\s*[:=]\s*([0-9]+)\s*$/m)
   if (!m) return null
   const v = parseInt(m[1], 10)
   return Number.isFinite(v) && v > 0 ? v : null
 }
 
 /**
- * 从环境变量读取字数限制，支持 SPARKLITE_WORD_LIMIT 与 AI_SUMMARY_WORD_LIMIT。
+ * 从环境变量读取字数限制（AISUMMARY_WORD_LIMIT）
  */
 function readWordLimitFromEnv(): number | null {
-  const envVal = process.env.AISUMMARY_WORD_LIMIT || process.env.SPARKLITE_WORD_LIMIT || process.env.AI_SUMMARY_WORD_LIMIT || ''
+  const envVal = process.env.AISUMMARY_WORD_LIMIT || ''
   const v = parseInt(envVal, 10)
   return Number.isFinite(v) && v > 0 ? v : null
 }
 
 /**
- * 获取最大字数限制：优先 custom.ts，其次环境变量，默认 8000。
+ * 获取最大字数限制（默认 8000）：优先 aisummary.config.js，其次环境变量。
  */
 function getWordLimit(): number {
   return readWordLimitFromCustom() ?? readWordLimitFromEnv() ?? 8000
+}
+
+/**
+ * 从 aisummary.config.js 的注释配置中读取日志等级（AISUMMARY_LOG_LEVEL，0/1/2）
+ */
+function readLogLevelFromCustom(): LogLevel | null {
+  const customPath = path.join(ROOT, 'src', 'plugins', 'aisummary.config.js')
+  if (!fs.existsSync(customPath)) return null
+  const content = fs.readFileSync(customPath, 'utf-8')
+  const m = content.match(/^\s*\/\/\s*AISUMMARY_LOG_LEVEL\s*[:=]\s*([0-2])\s*$/m)
+  if (!m) return null
+  const v = parseInt(m[1], 10)
+  return (v === 0 || v === 1 || v === 2) ? (v as LogLevel) : null
+}
+
+/**
+ * 从环境变量读取日志等级（AISUMMARY_LOG_LEVEL），允许 0/1/2
+ */
+function readLogLevelFromEnv(): LogLevel | null {
+  const envVal = process.env.AISUMMARY_LOG_LEVEL || ''
+  const v = parseInt(envVal, 10)
+  return (v === 0 || v === 1 || v === 2) ? (v as LogLevel) : null
+}
+
+/**
+ * 获取日志等级，默认 1
+ */
+function getLogLevel(): LogLevel {
+  return readLogLevelFromCustom() ?? readLogLevelFromEnv() ?? 1
+}
+
+/**
+ * 从 aisummary.config.js 的注释配置中读取并发处理数（AISUMMARY_CONCURRENCY）
+ * 建议不高于 5
+ */
+function readConcurrencyFromCustom(): number | null {
+  const customPath = path.join(ROOT, 'src', 'plugins', 'aisummary.config.js')
+  if (!fs.existsSync(customPath)) return null
+  const content = fs.readFileSync(customPath, 'utf-8')
+  const m = content.match(/^\s*\/\/\s*AISUMMARY_CONCURRENCY\s*[:=]\s*([0-9]+)\s*$/m)
+  if (!m) return null
+  const v = parseInt(m[1], 10)
+  return Number.isFinite(v) && v > 0 ? v : null
+}
+
+/**
+ * 从环境变量读取并发处理数（AISUMMARY_CONCURRENCY）
+ */
+function readConcurrencyFromEnv(): number | null {
+  const envVal = process.env.AISUMMARY_CONCURRENCY || ''
+  const v = parseInt(envVal, 10)
+  return Number.isFinite(v) && v > 0 ? v : null
+}
+
+/**
+ * 将并发处理数限制在区间 [1, 5]
+ */
+function clampConcurrency(n: number): number {
+  return Math.max(1, Math.min(5, n))
+}
+
+/**
+ * 获取并发处理数（默认 3），限定在 [1,5]
+ */
+function getConcurrency(): number {
+  const c = readConcurrencyFromCustom() ?? readConcurrencyFromEnv() ?? 3
+  return clampConcurrency(c)
+}
+
+/**
+ * 日志输出（根据 currentLogLevel 控制）
+ * @param level 日志等级（0 错误；1 信息；2 调试）
+ * @param message 文本消息
+ */
+function log(level: LogLevel, message: string): void {
+  if (level === 0) {
+    console.error(message)
+    return
+  }
+  if (level <= currentLogLevel) {
+    console.log(message)
+  }
+}
+
+/**
+ * 针对提交到摘要 API 的正文清洗：移除代码块/行内代码/图片/链接标记/HTML 等，压缩空白。
+ * 注意：不做句式整形与标点替换，只保留可读纯文本，适合 API 处理。
+ * @param body 原始正文（可能包含 Markdown/HTML）
+ * @returns 清洗后的纯文本正文
+ */
+function sanitizeBodyForAPI(body: string): string {
+  if (!body) return ''
+  return String(body)
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]*`/g, '')
+    .replace(/!\[[^\]]*\]\([^\)]+\)/g, '')
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+    .replace(/^[ \t]*#{1,6}[^\n]*\n/gm, '')
+    .replace(/^>\s+/gm, '')
+    .replace(/^[ \t]*[-*+]\s+/gm, '')
+    .replace(/^[ \t]*\d+\.\s+/gm, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\r?\n+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 }
 
 /**
@@ -186,7 +340,7 @@ function sanitizeSummaryText(text: string, maxLen = SUMMARY_MAX_LEN): string {
   // 去除三引号代码块
   s = s.replace(/```[\s\S]*?```/g, '')
   // 去除行内代码
-  s = s.replace(/`[^`]*`/g, '')
+  // s = s.replace(/`[^`]*`/g, '')
   // 图片
   s = s.replace(/!\[[^\]]*\]\([^\)]+\)/g, '')
   // 链接，保留可读文本
@@ -210,15 +364,26 @@ function sanitizeSummaryText(text: string, maxLen = SUMMARY_MAX_LEN): string {
 }
 
 /**
- * 判断文本是否包含明显的代码痕迹，若是则不适合作为摘要。
+ * 判断文本是否包含代码特征，避免将代码样式内容作为摘要。
+ * 说明：使用简单打分规则以降低误判率（例如普通句子中的句号不应触发代码判定）。
+ * 规则：
+ * - 代码块（```...```）+2 分；行内代码（`...`）+1 分
+ * - 典型保留字（import/export/const/...）+2 分
+ * - 箭头函数样式（=>）+1 分；点访问（foo.bar）+1 分
+ * - 若包含较多括号/分号等（累计≥3 个），+1 分
+ * 只要得分 ≥2 判定为“看起来像代码”。
  */
 function looksLikeCode(text: string): boolean {
   if (!text) return false
-  const patterns = [
-    /\b(import|export|const|let|var|function|interface|class|return|new)\b/,
-    /=>|\{|\}|;|\(|\)|\[|\]|::|\.|\/\w+/,
-  ]
-  return patterns.some(re => re.test(text))
+  let score = 0
+  if (/```[\s\S]*?```/.test(text)) score += 2
+  if (/`[^`]+`/.test(text)) score += 1
+  if (/\b(import|export|const|let|var|function|interface|class|return|new)\b/.test(text)) score += 2
+  if (/\w+\s*=>/.test(text)) score += 1
+  if (/\w+\.\w+/.test(text)) score += 1
+  const punctCount = (text.match(/[{}();\[\]]/g) || []).length
+  if (punctCount >= 3) score += 1
+  return score >= 2
 }
 
 /**
@@ -349,7 +514,7 @@ function escapeYaml(text: string): string {
 
 /**
  * 基于正文生成简易摘要（本地 fallback）
- */
+
 function localFallbackSummary(title: string, body: string): string {
   const clean = body
     .replace(/<[^>]+>/g, '')
@@ -360,6 +525,7 @@ function localFallbackSummary(title: string, body: string): string {
   const slice = clean.slice(0, maxLen)
   return slice.length < clean.length ? slice + '…' : slice || title
 }
+ */
 
 /**
  * 调用外部 API 生成摘要；优先读取 custom.ts 注释配置，其次读取环境变量。
@@ -409,36 +575,78 @@ function readTitleFromFrontmatter(frontmatter: string): string {
  * 否则尝试调用 API，失败时使用本地兜底摘要。
  */
 async function run(): Promise<void> {
+  // 初始化日志与并发参数
+  currentLogLevel = getLogLevel()
+  const concurrency = getConcurrency()
+  const cleanBeforeAPI = getCleanBeforeAPI()
+
   const files = findMarkdownEntries(BLOG_DIR)
   if (!files.length) {
-    console.log('未找到任何 Markdown 文章。')
+    log(1, '未找到任何 Markdown 文章。')
     return
   }
   const wordLimit = getWordLimit()
   const cfg = readAIConfigFromCustom()
   const hasCustomAPI = !!(cfg.api || process.env.AI_SUMMARY_API)
 
-  for (const file of files) {
-    const content = fs.readFileSync(file, 'utf8')
-    const { frontmatter, body } = splitFrontmatterAndBody(content)
-    const title = readTitleFromFrontmatter(frontmatter)
-    const limitedBody = limitBody(body, wordLimit)
+  // 调试说明：脚本仅处理 blog 目录的文章，不处理页面文件
+  log(2, `调试：跳过页面，仅处理文章目录：${BLOG_DIR}`)
+  log(1, `待处理文章数：${files.length}，字数限制：${wordLimit}，并发：${concurrency}`)
+  log(2, `调试：提交给 API 的内容清洗开关：${cleanBeforeAPI ? 'true' : 'false'}`)
 
-    // 生成摘要：优先 API；无/失败则本地规则
-    const apiSummary = hasCustomAPI ? await callSummaryAPI(title, limitedBody, wordLimit) : null
-    let summaryRaw = apiSummary ?? ''
-    let summary = sanitizeSummaryText(summaryRaw, SUMMARY_MAX_LEN)
-    if (!summary || looksLikeCode(summary)) {
-      summary = localGenerateSummary(title, limitedBody, SUMMARY_MAX_LEN)
+  /**
+   * 处理单个 Markdown 文件：生成摘要并写入 frontmatter
+   * @param file 文章路径
+   * @param limit 最大字数限制（用于正文裁剪与 API 提交）
+   */
+  async function processOne(file: string, limit: number): Promise<void> {
+    try {
+      const content = fs.readFileSync(file, 'utf8')
+      const { frontmatter, body } = splitFrontmatterAndBody(content)
+      const title = readTitleFromFrontmatter(frontmatter)
+      const limitedBody = limitBody(body, limit)
+
+      if (body.length > limitedBody.length) {
+        log(1, `正文超长，已裁剪到 ${limit} 字：${path.relative(ROOT, file)}`)
+      }
+
+      // 生成摘要：优先 API；无/失败则本地规则
+      const contentForAPI = cleanBeforeAPI ? sanitizeBodyForAPI(limitedBody) : limitedBody
+      if (cleanBeforeAPI) {
+        log(2, `调试：正文已清洗后提交 API：${path.relative(ROOT, file)}`)
+      }
+      const apiSummary = hasCustomAPI ? await callSummaryAPI(title, contentForAPI, limit) : null
+      let summaryRaw = apiSummary ?? ''
+      let summary = sanitizeSummaryText(summaryRaw, SUMMARY_MAX_LEN)
+      if (!summary || looksLikeCode(summary)) {
+        log(1, `API 失败或内容不适合摘要，使用本地规则：${path.relative(ROOT, file)}`)
+        summary = localGenerateSummary(title, limitedBody, SUMMARY_MAX_LEN)
+      } else {
+        log(1, `摘要生成成功（API）：${path.relative(ROOT, file)}`)
+      }
+      // 统一为单句陈述句
+      summary = toDeclarativeSentence(summary, SUMMARY_MAX_LEN)
+
+      const nextFrontmatter = upsertSummaryInFrontmatter(frontmatter, summary)
+      const nextContent = nextFrontmatter + body
+      fs.writeFileSync(file, nextContent, 'utf8')
+      log(1, '已写入摘要：' + path.relative(ROOT, file))
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      log(0, `处理失败：${path.relative(ROOT, file)} - ${msg}`)
     }
-    // 统一为单句陈述句
-    summary = toDeclarativeSentence(summary, SUMMARY_MAX_LEN)
-
-    const nextFrontmatter = upsertSummaryInFrontmatter(frontmatter, summary)
-    const nextContent = nextFrontmatter + body
-    fs.writeFileSync(file, nextContent, 'utf8')
-    console.log('已写入摘要：' + path.relative(ROOT, file))
   }
+
+  // 并发执行任务（限定 1~5）
+  const queue = files.slice()
+  async function worker() {
+    while (queue.length) {
+      const f = queue.shift()!
+      await processOne(f, wordLimit)
+    }
+  }
+  const workers = Array.from({ length: concurrency }, () => worker())
+  await Promise.all(workers)
 }
 
 run().catch((e) => {

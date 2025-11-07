@@ -1,5 +1,9 @@
 // AISummary（静态版）
-console.log('\n %c AISummary（静态版） %c Auther: Ljxme \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+console.log(
+  '%c AISummary (Static) %c Author: Ljxme',
+  'color:#fff;background:linear-gradient(90deg,#ff8acb,#ff5ebc,#ff1493);padding:5px 12px;border-radius:4px 0 0 4px;',
+  'color:#000;background:linear-gradient(90deg,#ff1493,#ffb6c1,#fff);padding:5px 14px 5px 8px;border-radius:0 4px 4px 0;'
+)
 
 // 运行标记，防止重复动画
 let aisummaryIsRunning = false;
@@ -11,7 +15,7 @@ const aisummary = {
    * @returns 优先返回 data-ai-summary 的值，否则返回元素文本
    */
   getStaticSummary() {
-    const el = document.querySelector('.aisummary-explanation') || document.querySelector('.sparkLite-explanation');
+    const el = document.querySelector('.aisummary-explanation');
     if (!el) return '';
     const attr = el.getAttribute('data-ai-summary');
     const text = attr && attr.trim().length ? attr : (el.textContent || '').trim();
@@ -23,7 +27,7 @@ const aisummary = {
    * @param {string} text 完整摘要文本
    */
   aiShowAnimation(text) {
-    const element = document.querySelector('.aisummary-explanation') || document.querySelector('.sparkLite-explanation');
+    const element = document.querySelector('.aisummary-explanation');
     if (!element || !text) return;
     if (aisummaryIsRunning) return;
 
@@ -83,7 +87,7 @@ const aisummary = {
       }
     }, { threshold: 0 });
 
-    const container = document.querySelector('.aisummary-container') || document.querySelector('.post-SparkLite');
+    const container = document.querySelector('.aisummary-container');
     if (container) observer.observe(container);
   }
 };
@@ -97,7 +101,7 @@ function ensureSummaryPosition() {
     : null;
   const containerSelector = selectorFromWindow || '#content';
   const contentEl = document.querySelector(containerSelector);
-  const summaryEl = document.querySelector('.aisummary-container') || document.querySelector('.post-SparkLite');
+  const summaryEl = document.querySelector('.aisummary-container');
   if (!contentEl || !summaryEl) return;
   if (!contentEl.contains(summaryEl)) {
     contentEl.insertBefore(summaryEl, contentEl.firstChild);
@@ -108,7 +112,7 @@ function ensureSummaryPosition() {
  * 初始化 AISummary：读取静态摘要并渲染（或执行动画）
  */
 function initializeAISummary() {
-  const summaryEl = document.querySelector('.aisummary-explanation') || document.querySelector('.sparkLite-explanation');
+  const summaryEl = document.querySelector('.aisummary-explanation');
   if (!summaryEl) return;
   ensureSummaryPosition();
   const summary = aisummary.getStaticSummary();
