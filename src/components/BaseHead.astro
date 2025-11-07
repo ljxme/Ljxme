@@ -7,6 +7,8 @@ import aisummaryConfig from '../plugins/aisummary.config.ts?raw';
 import aisummaryCss from '../assets/styles/aisummary.css?url';
 import shuoshuoCss from '../assets/styles/shuoshuo.css?url';
 
+void aisummaryConfig;
+
 type Props = SiteMeta
 
 const { articleDate, description, ogImage, title } = Astro.props
@@ -111,7 +113,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
   && !/^\/blog\/\d+\/?$/.test(Astro.url.pathname)
   && (
     <script type='module' is:inline>
-      import '@/plugins/aisummary.ts'
+      import '@/src/plugins/aisummary.ts'
     </script>
   )}
 {/* AISummary 样式 */}
