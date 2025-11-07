@@ -122,6 +122,18 @@ function initializeSparkLite(): void {
     sparkLite.aiShowAnimation(summary);
 }
 
-// 初始加载时运行
-document.removeEventListener('DOMContentLoaded', initializeSparkLite);
-document.addEventListener('DOMContentLoaded', initializeSparkLite);
+/**
+ * 保证在各种加载时机下都能触发初始化。
+ * 函数说明：
+ * - 若文档仍在解析（readyState === 'loading'），监听 DOMContentLoaded；
+ * - 若文档已解析完成，立即执行初始化；
+ * - 为避免重复绑定，先移除旧的 DOMContentLoaded 监听器。
+ */
+(function ensureInit(): void {
+    document.removeEventListener('DOMContentLoaded', initializeSparkLite);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeSparkLite);
+    } else {
+        initializeSparkLite();
+    }
+})();
