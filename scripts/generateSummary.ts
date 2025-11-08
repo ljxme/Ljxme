@@ -352,6 +352,46 @@ function stripAstroAndMDXComponents(text: string): string {
   s = s.replace(/<([A-Z][A-Za-z0-9_.-]*)\b[^>]*>[\s\S]*?<\/\1>/g, '')
   return s
 }
+/**
+ * 合规友好清洗：移除常见 Emoji/表情与不文明/敏感用语，降低 API 拒绝风险。
+ * @param text 原始纯文本
+ * @returns 更合规友好的纯文本
+ */
+function neutralizeSensitiveContent(text: string): string {
+  if (!text) return ''
+  let s = String(text)
+  // 移除常见 Emoji/扩展象形文字
+  try {
+    s = s.replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}]/gu, '')
+  } catch {
+    // 兼容不支持 Unicode 标志的环境：
+    // 1) 直接移除 BMP 范围的符号：\u2600-\u27BF（杂项符号和象形文字）
+    // 2) 通过匹配代理项对移除所有非 BMP 字符（覆盖绝大多数 Emoji）
+    s = s.replace(/[\u2600-\u27BF]/g, '')
+    s = s.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '')
+  }
+  // 优先进行“柔性替换”，保留语义同时降低不文明表达触发概率
+  const replacements: Array<[RegExp, string]> = [
+    [/屎山/g, '糟糕堆积'],
+    [/白嫖/g, '免费获取'],
+    [/操蛋/g, '糟糕'],
+    [/狗屁/g, '不合理'],
+    [/垃圾/g, '质量较差'],
+    [/傻逼/g, '不文明词']
+  ]
+  for (const [re, rep] of replacements) {
+    s = s.replace(re, rep)
+  }
+  // 轻量不文明/敏感词（根据需要可扩展/收敛）
+  const banned = [
+    '恐怖主义', '暴力', '黄赌毒', '宗教', '政治', '国家安全'
+  ]
+  for (const w of banned) {
+    const re = new RegExp(w, 'gi')
+    s = s.replace(re, '')
+  }
+  return s.replace(/\s{2,}/g, ' ').trim()
+}
 
 /**
  * 针对提交到摘要 API 的正文清洗：移除代码块/行内代码/图片/链接标记/HTML 等，压缩空白。
@@ -362,7 +402,7 @@ function stripAstroAndMDXComponents(text: string): string {
 function sanitizeBodyForAPI(body: string): string {
   if (!body) return ''
   let s = stripAstroAndMDXComponents(String(body))
-  return s
+  s = s
     .replace(/```[\s\S]*?```/g, '')
     .replace(/`[^`]*`/g, '')
     .replace(/!\[[^\]]*\]\([^\)]+\)/g, '')
@@ -375,6 +415,9 @@ function sanitizeBodyForAPI(body: string): string {
     .replace(/\r?\n+/g, ' ')
     .replace(/\s{2,}/g, ' ')
     .trim()
+  // 合规友好处理：移除 Emoji 与不文明/敏感词
+  s = neutralizeSensitiveContent(s)
+  return s
 }
 
 /**
@@ -577,6 +620,9 @@ function localGenerateSummary(title: string, body: string, maxLen = SUMMARY_MAX_
     .replace(/\r?\n+/g, ' ')
     .replace(/\s{2,}/g, ' ')
     .trim()
+
+  // 合规友好处理：移除 Emoji 与不文明/敏感词（与 API 提交流程一致）
+  clean = neutralizeSensitiveContent(clean)
 
   if (!clean) {
     // 若正文清洗后为空，则用标题作简介
