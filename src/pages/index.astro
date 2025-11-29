@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+
 import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
@@ -10,6 +11,7 @@ import Section from '@/components/home/Section.astro'
 // import SkillLayout from '@/components/home/SkillLayout.astro'
 import RecentComments from '@/components/RecentComments.astro'
 import config from '@/site-config'
+
 // 导入诗歌背景样式
 import '@/assets/styles/text-background.css'
 
@@ -62,12 +64,7 @@ if (imagePath && !images[imagePath])
           <Label title='中国•湖北'>
             <Icon name='location' class='size-5' slot='icon' />
           </Label>
-          <Label
-            title='GitHub'
-            as='a'
-            href='https://github.com/ljxme'
-            target='_blank'
-          >
+          <Label title='GitHub' as='a' href='https://github.com/ljxme' target='_blank'>
             <Icon name='github' class='size-5' slot='icon' />
           </Label>
         </div>
