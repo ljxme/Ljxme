@@ -1,4 +1,4 @@
-import type { CardListData, Config, IntegrationUserConfig,ThemeUserConfig } from 'astro-pure/types'
+import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -24,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: 'src/assets/avatar.webp',
+    src: '/src/assets/avatar.png',
     alt: 'Avatar'
   },
 
@@ -48,7 +48,7 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: '文章', link: '/blog' },
-    //  { title: '文档', link: '/docs' },
+      //  { title: '文档', link: '/docs' },
       { title: '项目', link: '/projects' },
       { title: '友链', link: '/links' },
       { title: '留言', link: '/board' },
@@ -66,12 +66,12 @@ export const theme: ThemeUserConfig = {
       {
         title: '鄂ICP备2025150801号-1',
         link: 'https://beian.miit.gov.cn/',
-        style: 'text-sm', // Uno/TW CSS class
+        style: 'text-sm' // Uno/TW CSS class
       },
       {
         title: '川公网安备51170302000216号',
         link: 'https://beian.mps.gov.cn/#/query/webSearch?code=51170302000216',
-        style: 'text-sm',
+        style: 'text-sm'
       },
       {
         title: 'Travelling',
@@ -88,8 +88,8 @@ export const theme: ThemeUserConfig = {
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
-    social: { 
-      email: 'mailto:me@ljx.icu', 
+    social: {
+      email: 'mailto:me@ljx.icu',
       github: 'https://github.com/ljxme',
       telegram: 'https://t.me/ljxme'
     }
@@ -118,18 +118,21 @@ export const integ: IntegrationUserConfig = {
     // Friend logbook
     logbook: [
       { date: '2025-10-30', content: " [AirTouchの小站] rejected, [Shuoer's blog] inactived" },
-      { date: '2025-10-22', content: " [青序栈] rejected" },
-      { date: '2025-10-17', content: " [清羽飞扬] added" },
+      { date: '2025-10-22', content: ' [青序栈] rejected' },
+      { date: '2025-10-17', content: ' [清羽飞扬] added' },
       { date: '2025-10-10', content: " [Shuoer's blog] added" },
-      { date: '2025-10-09', content: " [温锦瑜的博客]、[Chancel's blog]、[FKUN]、[Zeruns's Blog] added" }
+      {
+        date: '2025-10-09',
+        content: " [温锦瑜的博客]、[Chancel's blog]、[FKUN]、[Zeruns's Blog] added"
+      }
     ],
     // Yourself link info
     applyTip: [
-      { name: 'Name', val: "梨尽兴" },
+      { name: 'Name', val: '梨尽兴' },
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://blog.ljx.icu' },
       { name: 'Rss', val: 'https://blog.ljx.icu/rss.xml' },
-      { name: 'Avatar', val: 'https://blog.ljx.icu/favicon.png' },
+      { name: 'Avatar', val: 'https://blog.ljx.icu/favicon.png' }
     ],
     // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false
@@ -143,7 +146,7 @@ export const integ: IntegrationUserConfig = {
     // server: 'https://v1.hitokoto.cn/?c=i',
     // target: (data) => (data as { hitokoto: string }).hitokoto || 'Error'
     // https://github.com/lukePeavey/quotable
-    server: 'https://v1.hitokoto.cn/?c=i', 
+    server: 'https://v1.hitokoto.cn/?c=i',
     target: `(data) => data.hitokoto || 'Error'`
   },
   // UnoCSS typography
@@ -170,7 +173,7 @@ export const integ: IntegrationUserConfig = {
     // Server service link
     server: 'https://waline.ljx.icu/',
     // Refer https://waline.js.org/en/guide/features/emoji.html
-    emoji: ['bmoji',"ljxme","heybox_cube","heybox_heniang","linedog"],
+    emoji: ['bmoji', 'ljxme', 'heybox_cube', 'heybox_heniang', 'linedog'],
     // Refer https://waline.js.org/en/reference/client/props.html
     additionalConfigs: {
       // search: false,
@@ -179,7 +182,7 @@ export const integ: IntegrationUserConfig = {
       locale: {
         reaction0: 'Like',
         placeholder: '欢迎留下评论~（无需登录，评论经审核后可见）'
-      },
+      }
       // imageUploader: false
     }
   }

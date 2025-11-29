@@ -79,12 +79,12 @@ const {
       pathDurations.set(path, duration)
 
       /* 1. 初始状态 */
-      path.style.strokeDasharray  = `${length} ${length}`
+      path.style.strokeDasharray = `${length} ${length}`
       path.style.strokeDashoffset = length
-      path.style.transition       = 'none'
-      path.style.opacity          = '1'
-      path.style.fill             = 'transparent'          // 关键
-      path.dataset.targetFill     = '#000'                 // 想填的颜色
+      path.style.transition = 'none'
+      path.style.opacity = '1'
+      path.style.fill = 'transparent' // 关键
+      path.dataset.targetFill = '#000' // 想填的颜色
     })
 
     // 使用递归方式实现顺序动画
@@ -97,12 +97,12 @@ const {
       const path = paths[index]
       const duration = pathDurations.get(path)
       // 强制重排以确保初始状态被应用
-      path.getBoundingClientRect()         // force reflow
+      path.getBoundingClientRect() // force reflow
       // 设置动画
       path.style.transition = `stroke-dashoffset ${duration}ms ease-in-out,
-                              fill ${duration}ms ease-in-out`   // 同时过渡 fill
+                              fill ${duration}ms ease-in-out` // 同时过渡 fill
       path.style.strokeDashoffset = '0'
-      path.style.fill = path.dataset.targetFill   // ← 边画边填
+      path.style.fill = path.dataset.targetFill // ← 边画边填
       // 等待动画完成
       setTimeout(() => {
         // 如果不是最后一笔，添加延迟
@@ -115,7 +115,7 @@ const {
     }
 
     const rollbackSequentially = (index, callback) => {
-          /* 回滚前恢复透明（可选）
+      /* 回滚前恢复透明（可选）
       paths.forEach(p => {
         p.style.fill = 'transparent'
         p.style.strokeDashoffset = pathLengths.get(p)

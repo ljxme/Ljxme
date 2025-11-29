@@ -1,6 +1,7 @@
 ---
 import links from 'public/links.json'
 import config from 'virtual:config'
+
 import { Collapse, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
@@ -8,7 +9,7 @@ import FriendList from '@/components/links/FriendList.astro'
 const headings = [
   { depth: 2, slug: 'common-links', text: '朋友们' },
   { depth: 2, slug: 'special-links', text: '特殊链接' },
-  { depth: 2, slug: 'small-circle', text: '朋友圈' }, 
+  { depth: 2, slug: 'small-circle', text: '朋友圈' },
   { depth: 2, slug: 'apply-links', text: '申请友链' }
 ]
 
@@ -29,21 +30,21 @@ const linksConf = config.integ.links
   </Collapse>
   <h2 id='special-links'>特殊链接</h2>
   <FriendList list={friends[2]} />
-     <h2 id='small-circle'>朋友圈</h2>
-   <div id='friend-circle-lite-root' class='not-prose'>Loading...</div>
-   <script>
-      import '@/assets/styles/fc.css'
+  <h2 id='small-circle'>朋友圈</h2>
+  <div id='friend-circle-lite-root' class='not-prose'>Loading...</div>
+  <script>
+    import '@/assets/styles/fc.css'
 
-      import { FriendCircle } from '@/plugins/friendCircle'
+    import { FriendCircle } from '@/plugins/friendCircle'
 
-      const fc = new FriendCircle()
-      fc.init({
-         private_api_url: 'https://fc.ljx.icu/',
-         page_turning_number: 10,
-         error_img: 'https://cravatar.cn/avatar/57d8260dfb55501c37dde588e7c3852c'
-      })
-      fc.load()
-   </script>
+    const fc = new FriendCircle()
+    fc.init({
+      private_api_url: 'https://fc.ljx.icu/',
+      page_turning_number: 10,
+      error_img: 'https://cravatar.cn/avatar/57d8260dfb55501c37dde588e7c3852c'
+    })
+    fc.load()
+  </script>
 
   <!-- apply-links -->
   <h2 id='apply-links'>申请友链</h2>
@@ -72,7 +73,7 @@ const linksConf = config.integ.links
   </p>
    -->
   <p>
-    可通过下方留言申请友链。此外申请说明：<br/>
+    可通过下方留言申请友链。此外申请说明：<br />
     Apply your link by leaving comment. Additional info:
   </p>
   <ul>

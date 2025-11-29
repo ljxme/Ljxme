@@ -7,6 +7,7 @@ import config from '@/site-config'
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
 import '@/assets/styles/app.css'
+
 import Signature from 'preset/components/signature/Signature.astro'
 
 interface Props {
@@ -37,11 +38,13 @@ const {
         />
       )
     }
-    <div class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'>
+    <div
+      class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'
+    >
       <Header />
       <div class='flex-1 w-full'>
         <slot />
-        <Signature mode="once-on-view" threshold={0.8} />
+        <Signature mode='once-on-view' threshold={0.8} />
       </div>
       <Footer />
     </div>
@@ -58,11 +61,11 @@ const {
         ) !important;
       }
     </style>
-    
-    {/* Vercount */}
-    <script src="https://vercount.one/js" async is:inline></script>
 
-    {/* Netease Mini Player */} 
+    {/* Vercount */}
+    <script src='https://vercount.one/js' async is:inline></script>
+
+    {/* Netease Mini Player */}
     <!-- <div class="netease-mini-player" transition:persist
          data-playlist-id="17374420913"
          data-embed="false"
@@ -71,7 +74,5 @@ const {
          data-theme="auto" 
          data-default-minimized="true"> 
     </div> -->
-  
   </body>
-
 </html>

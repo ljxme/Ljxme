@@ -15,14 +15,14 @@ interface Props {
   highlightColor?: string
 }
 
-const { 
-  title, 
-  meta = {}, 
-  view, 
-  comment: enableComment, 
-  back = '/', 
+const {
+  title,
+  meta = {},
+  view,
+  comment: enableComment,
+  back = '/',
   highlightColor,
-  ...props 
+  ...props
 } = Astro.props
 
 // 构建完整的 meta 信息
@@ -36,26 +36,28 @@ const fullMeta: SiteMeta = {
 <PageLayout meta={fullMeta} {highlightColor} {...props}>
   <!-- 返回按钮 -->
   <Button title='Back' href={back} variant='back' />
-  
+
   <!-- 主内容区域 -->
   <main class='mt-6 w-full'>
     <!-- 页面头部 -->
     <header id='content-header' class='animate mb-8'>
-      <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl '>
+      <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>
         {title}
       </h1>
-      
+
       <!-- 页面信息（浏览量、评论等） -->
-      {(view || enableComment) && (
-        <div class='flex justify-start mt-4'>
-          <PageInfo {view} comment={enableComment} class='italic text-muted-foreground' />
-        </div>
-      )}
+      {
+        (view || enableComment) && (
+          <div class='flex justify-start mt-4'>
+            <PageInfo {view} comment={enableComment} class='italic text-muted-foreground' />
+          </div>
+        )
+      }
     </header>
 
     <!-- 页面内容 -->
-    <article 
-      id='board-content' 
+    <article
+      id='board-content'
       class={cn(
         'animate w-full max-w-none',
         'min-h-[60vh]', // 确保有足够的最小高度
@@ -69,11 +71,13 @@ const fullMeta: SiteMeta = {
     <section id='board-bottom' class='animate mt-8'>
       <slot name='bottom'>
         <!-- 默认评论区域 -->
-        {enableComment && (
-          <div class='max-w-4xl mx-auto'>
-            <Comment class='mt-6' />
-          </div>
-        )}
+        {
+          enableComment && (
+            <div class='max-w-4xl mx-auto'>
+              <Comment class='mt-6' />
+            </div>
+          )
+        }
       </slot>
     </section>
   </main>

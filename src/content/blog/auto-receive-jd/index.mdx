@@ -7,7 +7,7 @@ tags:
   - 工具
 comment: true
 language: '中文'
-summary: "文章介绍了如何通过使用随身WiFi刷Linux系统来获取京东豆的方法，首先，需要选择一款适合的随身WiFi芯片，如高通410或中兴微，并确保主板上能识别出相应的“Qualcomm”或“zxlc”字样，接着，安装必要的软件工具，包括随身WiFi助手、Debian固件、OpenWRT固件、SSH连接工具MobaXterm等，通过这些工具，用户可以将随身WiFi连接到电脑，进行固件的刷写和救砖操作，最后，通过切换网络和登录IP，用户能够访问到随身WiFi后台，实现刷Linux系统并获得京东豆的目的。"
+summary: '文章介绍了如何通过使用随身WiFi刷Linux系统来获取京东豆的方法，首先，需要选择一款适合的随身WiFi芯片，如高通410或中兴微，并确保主板上能识别出相应的“Qualcomm”或“zxlc”字样，接着，安装必要的软件工具，包括随身WiFi助手、Debian固件、OpenWRT固件、SSH连接工具MobaXterm等，通过这些工具，用户可以将随身WiFi连接到电脑，进行固件的刷写和救砖操作，最后，通过切换网络和登录IP，用户能够访问到随身WiFi后台，实现刷Linux系统并获得京东豆的目的。'
 ---
 
 ## 1，查看随身WiFi芯片型号
@@ -96,11 +96,7 @@ Port:22
 
 Password:1
 
-
-
 ps：如果你不使用我这个固件，那么请留意固件作者的说明
-
-
 
 ## 8，初次连接基本配置修改
 
@@ -239,16 +235,16 @@ sudo systemctl status docker    #查看Docker的运行状态
 
 ```bash
 sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json 
+sudo tee /etc/docker/daemon.json
 <<-'EOF'
 {"registry-mirrors":
     [
     "<https://docker.m.daocloud.io>",
-    "<https://dockerproxy.com>",        
-    "<https://docker.mirrors.ustc.edu.cn>",        
+    "<https://dockerproxy.com>",
+    "<https://docker.mirrors.ustc.edu.cn>",
     "<https://ustc-edu-cn.mirror.aliyuncs.com>",
-    "<https://ccr.ccs.tencentyun.com>",        
-    "<https://docker.nju.edu.cn>"    
+    "<https://ccr.ccs.tencentyun.com>",
+    "<https://docker.nju.edu.cn>"
     ]
 }
 EOF
@@ -276,11 +272,7 @@ reboot
 
 > latest 镜像是基于 alpine 构建，debian 镜像是基于 debian-slim 构建。如果需要使用 alpine 不支持的依赖，建议使用 debian 镜像。
 
-
-
 ps：下方”-p 5803:5700”这里的数可以随意更改但是访问地址需要随之改变（若不懂，请不要随意更改）
-
-
 
 拉取latest版命令（青龙面板最新版）：
 
@@ -465,7 +457,7 @@ ql repo <https://git.metauniverse-cn.com/https://github.com/shufflewzc/faker4.gi
 
 拉取命令在上面
 
-定时规则为 15 0-23/4 * * * ，也可自行配置，详见[青龙面板定时规则](https://blog.csdn.net/shuai_pi/article/details/123969976)
+定时规则为 15 0-23/4 \* \* \* ，也可自行配置，详见[青龙面板定时规则](https://blog.csdn.net/shuai_pi/article/details/123969976)
 
 点击运行，过一段时间会添加定时自动任务脚本
 
@@ -487,11 +479,7 @@ ql repo <https://git.metauniverse-cn.com/https://github.com/shufflewzc/faker4.gi
 
 输入获取到Cookies的相关参数
 
-
-
 ps：填写之后应该是已启用状态，如果不是则说明存在问题，例如cookie过期，需要重新设置
-
-
 
 **❤️之后便可以愉快地刷京东豆了❤️**
 

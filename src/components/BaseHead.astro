@@ -3,11 +3,11 @@ import { prod } from 'astro-pure/server'
 // import { ClientRouter } from 'astro:transitions'
 import type { SiteMeta } from 'astro-pure/types'
 import config from '@/site-config'
-import aisummaryConfig from '../plugins/aisummary.config.js?url';
-import aisummary from '../plugins/aisummary.js?url';
-import aisummaryCss from '../assets/styles/aisummary.css?url';
-import shuoshuoCss from '../assets/styles/shuoshuo.css?url';
 
+import aisummaryCss from '../assets/styles/aisummary.css?url'
+import shuoshuoCss from '../assets/styles/shuoshuo.css?url'
+import aisummaryConfig from '../plugins/aisummary.config.js?url'
+import aisummary from '../plugins/aisummary.js?url'
 
 type Props = SiteMeta
 
@@ -31,16 +31,16 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 
 {/* Font via CDN */}
 <link
-  rel="stylesheet"
-  href="https://ik.imagekit.io/ljx/LXGWBright-Medium/result.css?updatedAt=1760351683473"
+  rel='stylesheet'
+  href='https://ik.imagekit.io/ljx/LXGWBright-Medium/result.css?updatedAt=1760351683473'
 />
 <link
-  rel="stylesheet"
-  href="https://ik.imagekit.io/ljx/LXGWBright-MediumItalic/result.css?updatedAt=1760351714330"
+  rel='stylesheet'
+  href='https://ik.imagekit.io/ljx/LXGWBright-MediumItalic/result.css?updatedAt=1760351714330'
 />
-<link 
-  rel='stylesheet' 
-  href='https://ik.imagekit.io/ljx/LXGWmikhailcai/result.css?updatedAt=1762168258143' 
+<link
+  rel='stylesheet'
+  href='https://ik.imagekit.io/ljx/LXGWmikhailcai/result.css?updatedAt=1762168258143'
 />
 
 {/* Canonical URL */}
@@ -109,9 +109,11 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 
 {/* AISummary 工具 */}
 <script src={aisummaryConfig} is:inline></script>
-{Astro.url.pathname.startsWith('/blog/')
-  && !/^\/blog\/\d+\/?$/.test(Astro.url.pathname)
-  && <script src={aisummary} is:inline></script>}
+{
+  Astro.url.pathname.startsWith('/blog/') && !/^\/blog\/\d+\/?$/.test(Astro.url.pathname) && (
+    <script src={aisummary} is:inline />
+  )
+}
 {/* AISummary 样式 */}
 <link rel='stylesheet' href={aisummaryCss} />
 
@@ -119,12 +121,18 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <link rel='stylesheet' href={shuoshuoCss} />
 
 {/* APlayer 样式 */}
-<link rel="stylesheet" href={`${config.npmCDN}/aplayer@1.10.1/dist/APlayer.min.css`} media="all" onload="this.media=&quot;all&quot;">
+<link
+  rel='stylesheet'
+  href={`${config.npmCDN}/aplayer@1.10.1/dist/APlayer.min.css`}
+  media='all'
+  onload="this.media='all'"
+/>
 <script src={`${config.npmCDN}/aplayer@1.10.1/dist/APlayer.min.js`} is:inline></script>
 <script src={`${config.npmCDN}/meting@2.0.1/dist/Meting.min.js`} is:inline></script>
 
 {/* 统计分析 */}
-<script defer src="https://analytics.ljx.icu/tracker.min.js" data-website-id="ljxblog" is:inline></script>
+<script defer src='https://analytics.ljx.icu/tracker.min.js' data-website-id='ljxblog' is:inline
+></script>
 
 {/* Netease Mini Player */}
 <!-- 引入 Netease Mini Player 样式 -->

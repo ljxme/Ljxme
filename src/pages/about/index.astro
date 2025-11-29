@@ -1,10 +1,8 @@
 ---
-import { Button, Spoiler, Timeline, Collapse } from 'astro-pure/user'
+import { Button, Collapse, Spoiler, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import Substats from '@/components/about/Substats.astro'
 import ToolSection from '@/components/about/ToolSection.astro'
-
-
 
 const headings = [
   { depth: 2, slug: 'hobbies', text: '爱好' },
@@ -18,14 +16,18 @@ const headings = [
 
 <PageLayout title='关于' {headings} view>
   <p>站点简介</p>
-  <p>
-    名称是为了备案临时起的🤪
-  </p>
-  <Button as='a' href='https://github.com/ljxme/friend-circle-lite/issues/new?template=%E9%82%AE%E7%AE%B1%E8%AE%A2%E9%98%85.md' title='订阅本站❤️' variant='ahead' class='not-prose' target="_blank" rel="noopener noreferrer" />
+  <p>名称是为了备案临时起的🤪</p>
+  <Button
+    as='a'
+    href='https://github.com/ljxme/friend-circle-lite/issues/new?template=%E9%82%AE%E7%AE%B1%E8%AE%A2%E9%98%85.md'
+    title='订阅本站❤️'
+    variant='ahead'
+    class='not-prose'
+    target='_blank'
+    rel='noopener noreferrer'
+  />
   <p>作者简介</p>
-  <p>
-    一个无聊无趣的人~🫥
-  </p>
+  <p>一个无聊无趣的人~🫥</p>
   <p>
     格言：无。 <Spoiler>一只闲云野鹤🪶~</Spoiler>
   </p>
@@ -187,12 +189,9 @@ const headings = [
     ]}
   />
 
-
   {/* social-networks */}
   <h2 id='social-networks'>社交网络</h2>
-  <p>
-    欢迎关注我的社交网络，与我互动、分享经验、交流知识。
-  </p>
+  <p>欢迎关注我的社交网络，与我互动、分享经验、交流知识。</p>
   <Substats
     stats={[
       {
@@ -209,7 +208,7 @@ const headings = [
         link: 'https://t.me/ljxme',
         text: 'subscribers',
         api: 'telegram/ljxme'
-      },
+      }
     ]}
   />
   <!--
@@ -223,7 +222,10 @@ const headings = [
   -->
   {/* about-blog */}
   <h2 id='about-blog'>关于博客</h2>
-  <p>建站碎笔<Spoiler>更详细请查看<a href="https://blog.ljx.icu/blog/blog-begin/" >《博客伊始》</a></Spoiler></p>
+  <p>
+    建站碎笔<Spoiler
+      >更详细请查看<a href='https://blog.ljx.icu/blog/blog-begin/'>《博客伊始》</a></Spoiler>
+  </p>
   <Timeline
     events={[
       {
@@ -238,12 +240,12 @@ const headings = [
       },
       {
         date: '2021-2024',
-        content: 
+        content:
           '博客写作换成了 <a href="https://gridea.dev/"target="_blank">Gridea</a> 作为客户端，选择 <a href="https://www.netlify.com/"target="_blank">Netlify</a> 作为托管平台，GitHub仓库只作为源码备份使用。<s>域名都不记得在哪个免费平台薅的了QAQ</s> ，在 <a href="https://digitalplat.org/"target="_blank">DigitalPlat</a> 注册了域名 <b>artemisia.us.kg</b> ，后续因其网站政策原因迁移至 <b>artemisia.dpdns.org</b> ，不过博客也没维护多长时间'
       },
       {
         date: '2019-2020',
-        content: 
+        content:
           '初识博客,采用 <a href="https://pages.github.com/"target="_blank">GitHubPages</a> 作为托管平台,开始写作。<s>其实也没怎么写，只是初步接触到了博客这个东西。</s>'
       }
     ]}
@@ -251,21 +253,19 @@ const headings = [
   <Collapse title='本网站更新日志'>
     <Timeline
       events={[
-        {date: '2025-10-30',content:'更新Waline表情包为自定义表情包'},
-        {date: '2025-10-23',content:'完善评论及相关通知类功能，改善签名布局位置'},
-        {date: '2025-10-14',content:'实现文章AI摘要功能'},
-        {date: '2025-10-13',content:'接入CDN服务，对字体进行分割并使用CDN加速'},
-        {date: '2025-10-11',content:'网站所有备案完成'}
+        { date: '2025-10-30', content: '更新Waline表情包为自定义表情包' },
+        { date: '2025-10-23', content: '完善评论及相关通知类功能，改善签名布局位置' },
+        { date: '2025-10-14', content: '实现文章AI摘要功能' },
+        { date: '2025-10-13', content: '接入CDN服务，对字体进行分割并使用CDN加速' },
+        { date: '2025-10-11', content: '网站所有备案完成' }
       ]}
     />
   </Collapse>
-  <p>
-    网站的顺畅运行和个性化定制也依赖于以下优秀项目/服务提供商提供的资源和技术支持：
-  </p>
+  <p>网站的顺畅运行和个性化定制也依赖于以下优秀项目/服务提供商提供的资源和技术支持：</p>
   <ul>
     <li>域名 & 服务器: <a href='https://www.aliyun.com/' target='_blank'>Aliyun</a></li>
     <li>
-      框架 & 主题: <a href='https://astro.build/' target='_blank'>Astro</a> + 
+      框架 & 主题: <a href='https://astro.build/' target='_blank'>Astro</a> +
       <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>Astro Theme Pure</a>
     </li>
     <li>
@@ -275,19 +275,19 @@ const headings = [
       国外分流 & CI/CD: <a href='https://www.cloudflare.com/' target='_blank'>Cloudflare</a>
     </li>
     <li>
-      CDN: <a href='https://www.dogecloud.com/' target='_blank'>多吉云</a> + 
-      <a href='https://www.qiniu.com/' target='_blank'>七牛云</a> + 
+      CDN: <a href='https://www.dogecloud.com/' target='_blank'>多吉云</a> +
+      <a href='https://www.qiniu.com/' target='_blank'>七牛云</a> +
       <a href='https://cloud.tencent.com/' target='_blank'>腾讯云</a>
     </li>
     <li>
-      资源加速 & 存储: <a href='https://cdn.jsdmirror.com/' target='_blank'>JSDMirror</a> + 
-      <a href='https://www.bitiful.com/' target='_blank'>缤纷云</a> + 
+      资源加速 & 存储: <a href='https://cdn.jsdmirror.com/' target='_blank'>JSDMirror</a> +
+      <a href='https://www.bitiful.com/' target='_blank'>缤纷云</a> +
       <a href='https://imagekit.io/' target='_blank'>Imagekit</a>
     </li>
     <li>评论系统: <a href='https://waline.js.org' target='_blank'>Waline</a></li>
     <li>
-      访问统计: <a href='https://supabase.com/' target='_blank'>Supabase</a> + 
-      <a href='https://waline.js.org/' target='_blank'>Waline</a> + 
+      访问统计: <a href='https://supabase.com/' target='_blank'>Supabase</a> +
+      <a href='https://waline.js.org/' target='_blank'>Waline</a> +
       <a href='https://www.vercount.one/' target='_blank'>Vercount</a>
     </li>
     <li>
@@ -296,14 +296,16 @@ const headings = [
     <li>网站字体: <a href='https://github.com/lxgw/' target='_blank'>霞鹜文楷Bright</a></li>
   </ul>
   <Collapse title='网站优化结果'>
-    <figure class="mt-4">
+    <figure class='mt-4'>
       <img
-        src="https://tc.ljx.icu/file/imgs/lTEDvghx.png"
-        alt="还在优化中🥲"
-        loading="lazy"
-        class="rounded shadow max-w-sm md:max-w-md mx-auto my-0"
+        src='https://tc.ljx.icu/file/imgs/lTEDvghx.png'
+        alt='还在优化中🥲'
+        loading='lazy'
+        class='rounded shadow max-w-sm md:max-w-md mx-auto my-0'
       />
-      <figcaption class="mt-2 text-sm text-gray-600 text-center"> <a href='/images/youhua.png' target='_blank'>点击查看详细大图</a> </figcaption>
+      <figcaption class='mt-2 text-sm text-gray-600 text-center'>
+        <a href='/images/youhua.png' target='_blank'>点击查看详细大图</a>
+      </figcaption>
     </figure>
   </Collapse>
 </PageLayout>

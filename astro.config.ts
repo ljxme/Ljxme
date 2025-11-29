@@ -37,7 +37,7 @@ export default defineConfig({
   // 3. Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',
-  
+
   // adapter: zeabur(),
   // output: 'server',
   // ---
