@@ -137,7 +137,7 @@ export const integ: IntegrationUserConfig = {
       { name: 'Avatar', val: 'https://blog.ljx.icu/favicon.png' }
     ],
     // Cache avatars in `public/avatars/` to improve user experience.
-    cacheAvatar: false
+    cacheAvatar: true
   },
   // Enable page search function
   pagefind: true,
