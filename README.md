@@ -1,103 +1,50 @@
-# Astro Theme Pure
+<!-- Li's README -->
 
-English | [简体中文](./README-zh-CN.md)
+# [![Typing SVG](https://readme-typing-svg.demolab.com?font=Rubik+Glitch&size=40&pause=2000&color=000000&vCenter=true&random=true&height=40&lines=Hi%2C+I'm+L+J+X)](https://git.io/typing-svg)
 
-A simple, fast and powerful blog & document theme built by Astro.
+<img align='right' src="./README.assets/imgs/person.png" width="150" alt="person">
 
-[![GitHub deployments](https://img.shields.io/github/deployments/cworld1/astro-theme-pure/production?style=flat&logo=vercel&label=vercel)](https://astro-pure.js.org/)
-[![NPM Version](https://img.shields.io/npm/v/astro-pure?logo=npm&style=flat)](https://www.npmjs.com/package/astro-pure)
-[![GitHub Release](https://img.shields.io/github/v/release/cworld1/astro-theme-pure?include_prereleases&style=flat&label=template)](https://github.com/cworld1/astro-theme-pure/releases)
-[![GitHub License](https://img.shields.io/github/license/cworld1/astro-theme-pure?style=flat)](https://github.com/cworld1/astro-theme-pure/blob/main/LICENSE)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Convergence&pause=1000&color=000000&vCenter=true&random=true&height=20&lines=Loose+clouds+and+wild+cranes)](https://git.io/typing-svg)
 
-![image](./.github/assets/header.webp)
-![image](./.github/assets/body.webp)
+<strong>And I'm learning to be (a/an) => Minecraft Mod Dev / Reverse engineer / Web Fullstack</strong>
 
-> [!NOTE]
-> Known issues: 1. Header & customize options is still under development (template exposed still). 2. Theme template v4.0.5^ UnoCSS preset changed to PresetMini. If there's any problem, please report as issue.
+<!-- Some stats -->
 
-## Introduction
+[![Site](https://img.shields.io/badge/Li%27s%20Blog%20%e2%86%97-2CA5E0?style=flat&color=black&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZTRmZGZmIiBkPSJNMTIgMjJDNi40NzcgMjIgMiAxNy41MjMgMiAxMlM2LjQ3NyAyIDEyIDJzMTAgNC40NzcgMTAgMTBzLTQuNDc3IDEwLTEwIDEwbS0yLjI5LTIuMzMzQTE3LjkgMTcuOSAwIDAgMSA4LjAyNyAxM0g0LjA2MmE4LjAxIDguMDEgMCAwIDAgNS42NDggNi42NjdNMTAuMDMgMTNjLjE1MSAyLjQzOS44NDggNC43MyAxLjk3IDYuNzUyQTE1LjkgMTUuOSAwIDAgMCAxMy45NyAxM3ptOS45MDggMGgtMy45NjVhMTcuOSAxNy45IDAgMCAxLTEuNjgzIDYuNjY3QTguMDEgOC4wMSAwIDAgMCAxOS45MzggMTNNNC4wNjIgMTFoMy45NjVBMTcuOSAxNy45IDAgMCAxIDkuNzEgNC4zMzNBOC4wMSA4LjAxIDAgMCAwIDQuMDYyIDExbTUuOTY5IDBoMy45MzhBMTUuOSAxNS45IDAgMCAwIDEyIDQuMjQ4QTE1LjkgMTUuOSAwIDAgMCAxMC4wMyAxMW00LjI1OS02LjY2N0ExNy45IDE3LjkgMCAwIDEgMTUuOTczIDExaDMuOTY1YTguMDEgOC4wMSAwIDAgMC01LjY0OC02LjY2NyIvPjwvc3ZnPg==)](https://blog.ljx.icu/)&nbsp;[![RSS](https://img.shields.io/badge/Blog%20RSS%20%e2%86%97-FFA500?style=flat&color=black&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZlM2QxIiBkPSJNMyAxN2E0IDQgMCAwIDEgNCA0SDN6bTAtN2M2LjA3NSAwIDExIDQuOTI1IDExIDExaC0yYTkgOSAwIDAgMC05LTl6bTAtN2M5Ljk0MSAwIDE4IDguMDU5IDE4IDE4aC0yYzAtOC44MzctNy4xNjMtMTYtMTYtMTZ6Ii8+PC9zdmc+)](https://blog.ljx.icu/rss.xml)&nbsp;[![Telegram](https://img.shields.io/badge/Blog%20TG%20Channel%20%e2%86%97-2CA5E0?style=flat&color=black&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjY2ZkY2ZmIiBkPSJNMTcuMDk0IDcuMTQ2Yy41OTMtLjIxNS44ODgtLjI5MiAxLjA1LS4zMnEuMDAyLjA4LS4wMDIuMTIyYy0uMjMyIDIuNDQ0LTEuMjUxIDguNDU3LTEuNzc1IDExLjI1NWMtLjEyMi42NTUtLjIxNi45NjctLjg1LjU5NWMtLjQxNi0uMjQ1LS43OTItLjU1My0xLjE5Ni0uODE3Yy0xLjMyNS0uODY5LTMuMjIxLTIuMTYyLTMuMDY1LTIuMDg0Yy0xLjMwNC0uODYtLjc1OC0xLjM4Ni0uMDMtMi4wODhjLjExNy0uMTEzLjI0LS4yMzEuMzYtLjM1NmMuMDU0LS4wNTYuMzE3LS4zLjY4Ny0uNjQ1YzEuMTg4LTEuMTA0IDMuNDg0LTMuMjM5IDMuNTQyLTMuNDg2Yy4wMS0uMDQuMDE4LS4xOTItLjA3MS0uMjcxYy0uMDktLjA4LS4yMjMtLjA1My0uMzE4LS4wMzFxLS4yMDMuMDQ2LTYuNDc0IDQuMjc5cS0uOTE4LjYzLTEuNjY0LjYxNGwuMDA1LjAwM2MtLjY1NS0uMjMxLTEuMzA4LS40My0xLjk2NC0uNjNhNjYgNjYgMCAwIDEtMS4zLS40MDVsLS4zMDgtLjA5OGM0LjUyNy0xLjk3MiA3LjU0Mi0zLjI3IDkuMDUzLTMuODk5YzIuMTk0LS45MTMgMy40OTYtMS40MzggNC4zMi0xLjczOG0yLjQyMy0xLjkyOGExLjggMS44IDAgMCAwLS43MjYtLjM0NmMtLjItLjA0OC0uMzktLjA2My0uNTMzLS4wNmMtLjQ3Ny4wMDgtLjk4OC4xNDMtMS44NDYuNDU0Yy0uODc1LjMxOC0yLjIxOS44NjItNC40MDYgMS43NzFROS42OTEgOCAyLjgwNCAxMS4wMDFjLS40MDQuMTYxLS43NzMuMzQ0LTEuMDY1LjU2Yy0uMjcuMjAxLS42NDcuNTYtLjcxNiAxLjExYy0uMDUyLjQxNi4wNjkuOC4zMTUgMS4xMDNjLjIxNC4yNjMuNDg4LjQyMy42OTcuNTI0Yy4zMS4xNS43MjguMjgxIDEuMDk1LjM5NmMuNTczLjE4IDEuMTQ0LjM2MyAxLjcxOS41MzljMS43NzguNTQ0IDMuMjQyLjk5MiA0Ljg1MiAyLjA1NGMxLjE4MS43NzggMi4zNCAxLjU5IDMuNTIzIDIuMzY2Yy40MzIuMjgzLjgzNS42MDggMS4yOC44N2MuNDg4LjI4NSAxLjEwNi41NDYgMS44Ni40NzdjMS4xMzgtLjEwNSAxLjczLTEuMTUyIDEuOTctMi40M2MuNTIxLTIuNzkgMS41NTctOC44ODYgMS44LTExLjQzMmEzLjggMy44IDAgMCAwLS4wMzctLjg4NWExLjY2IDEuNjYgMCAwIDAtLjU4LTEuMDM1Ii8+PC9zdmc+)](https://t.me/s/ljx_me)&nbsp;[![views](https://komarev.com/ghpvc/?username=ljxme&style=flat&label=View&color=000000)](https://blog.ljx.icu/)&nbsp;[![Wakatime](https://wakatime.com/badge/user/2838d0a3-4136-4211-8550-80f69bf0a0be.svg)](https://wakatime.com/@2838d0a3-4136-4211-8550-80f69bf0a0be)
 
-Checkout [Demo Site →](https://astro-pure.js.org/)
+<!-- Inspired by https://github.com/cworld1 -->
 
-### :fire: Features
+Except for the way the sidebar is provided, here are some ways that you can find or contact me:
 
-- [x] :rocket: Fast & high performance
-- [x] :star: Simple & clean design
-- [x] :iphone: Responsive design
-- [x] :mag: Full-site search built with [pagefind](https://pagefind.app/)
-- [x] :world_map: Sitemap & RSS feed
-- [x] :spider_web: SEO-friendly
-- [x] :book: TOC (table of contents)
-- [x] :framed_picture: Dynamic open graph generation for posts
-- [x] :framed_picture: Mediumzoom lightbox for images
+[![Email](https://img.shields.io/badge/Gmail%20%40-2CA5E0?style=flat&color=black&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjwhLS0gSWNvbiBmcm9tIFNraWxsIEljb25zIGJ5IHRhbmRwZnVuIC0gaHR0cHM6Ly9naXRodWIuY29tL3RhbmRwZnVuL3NraWxsLWljb25zL2Jsb2IvbWFpbi9MSUNFTlNFIC0tPjxnIGZpbGw9Im5vbmUiPjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiBmaWxsPSIjRjRGMkVEIiByeD0iNjAiLz48cGF0aCBmaWxsPSIjNDI4NUY0IiBkPSJNNDEuNjM2IDIwMy4wMzloMzEuODE4di03Ny4yNzNMMjggOTEuNjc2djk3LjcyN2MwIDcuNTQ1IDYuMTE0IDEzLjYzNiAxMy42MzYgMTMuNjM2Ii8+PHBhdGggZmlsbD0iIzM0QTg1MyIgZD0iTTE4Mi41NDUgMjAzLjAzOWgzMS44MTljNy41NDUgMCAxMy42MzYtNi4xMTQgMTMuNjM2LTEzLjYzNlY5MS42NzVsLTQ1LjQ1NSAzNC4wOTEiLz48cGF0aCBmaWxsPSIjRkJCQzA0IiBkPSJNMTgyLjU0NSA2Ni42NzV2NTkuMDkxTDIyOCA5MS42NzZWNzMuNDkyYzAtMTYuODYzLTE5LjI1LTI2LjQ3Ny0zMi43MjctMTYuMzYzIi8+PHBhdGggZmlsbD0iI0VBNDMzNSIgZD0iTTczLjQ1NSAxMjUuNzY2di01OS4wOUwxMjggMTA3LjU4M2w1NC41NDUtNDAuOTA5djU5LjA5MUwxMjggMTY2LjY3NSIvPjxwYXRoIGZpbGw9IiNDNTIyMUYiIGQ9Ik0yOCA3My40OTN2MTguMTgybDQ1LjQ1NCAzNC4wOTF2LTU5LjA5TDYwLjcyNyA1Ny4xM0M0Ny4yMjcgNDcuMDE2IDI4IDU2LjYzIDI4IDczLjQ5MyIvPjwvZz48L3N2Zz4=)](mailto:ljxme01@gmail.com)&nbsp;[![Email](https://img.shields.io/badge/QQEmail%20%40-2CA5E0?style=flat&color=black&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACg0lEQVR4nO2YW08TQRiG94fgpeEvWhQ1xgjRaAqWQ7SlpSA9UBsoRIkY7YUJMQYVRcGWtgoUEHrcng+7r5lpd6Gi7pZuu5s4TzJXO4f36c580yzHMRgMBoPBMBgALgHwAeChPzwAP4D+dsInYTySAPoUBfh8PgCDks3nFxQFhm0u4c2HTRiN9a9h3LV7BEWBK2YrSJtZfoliuax3bpQrVbhXXtNMpCkKfApFcXPCSTsP29yIxY90C797eIx7di/NcmN8Gu+3wsoCZGAqm8OEZ4kOHBidwuraOgRR7FlwEQDZxldHp2gGi2sBJ+ksfaZKgCAIAg1uGrHRScbdAaSy3a+quUIRNv9zuqbJbEUguIZ6XZCfqxaQ2NmN487jOToh2Vob3yJdC/8l8h23JmfoWrcfPcF2bO9cn7YFCPliCY7FF/JB8qwEUa3VNAteq9fpL21qzk/eAF8o/rHvhQSkffn28xYGLXa6yAOnDwcnnd93P5NpjMz66ZzXHtoRfLcB8R/n7cICEkeJFMyzT+UFyWETO6jtgxYHnev+9DzixwnFMR0LEKq1xiuXtpQzsIpCSf2dUSpXMPfsVcuWrFSrqsZqIiCxGY61HLrQj33FMZG9AwxZXXJt/7i9086S2goQ0nwOk/PLrWVPOC17v5flgWZZHnMvIplpvyxrLkDDieK5cIlMtlXS27gYyb3yN0ndBCSi+4cYsrlO74xQlDbprwl5Rvp0AtdNAemAus4cUPmgL7V30HUTOFsir4855FKrFVyvBKQ7gzQt4Xop0A04JqAz3P8gwMO4ZNQIkI9IRsWnRqDfwB+2LisKNCX6AHjJtyS9U6ORwac6PIPBYDAYDK53/AKTcNBwHtWhrgAAAABJRU5ErkJggg==)](mailto:ljx_me@qq.com)&nbsp;[![Email](https://img.shields.io/badge/Foxmail%20%40-2CA5E0?style=flat&color=black&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACg0lEQVR4nO2YW08TQRiG94fgpeEvWhQ1xgjRaAqWQ7SlpSA9UBsoRIkY7YUJMQYVRcGWtgoUEHrcng+7r5lpd6Gi7pZuu5s4TzJXO4f36c580yzHMRgMBoPBMBgALgHwAeChPzwAP4D+dsInYTySAPoUBfh8PgCDks3nFxQFhm0u4c2HTRiN9a9h3LV7BEWBK2YrSJtZfoliuax3bpQrVbhXXtNMpCkKfApFcXPCSTsP29yIxY90C797eIx7di/NcmN8Gu+3wsoCZGAqm8OEZ4kOHBidwuraOgRR7FlwEQDZxldHp2gGi2sBJ+ksfaZKgCAIAg1uGrHRScbdAaSy3a+quUIRNv9zuqbJbEUguIZ6XZCfqxaQ2NmN487jOToh2Vob3yJdC/8l8h23JmfoWrcfPcF2bO9cn7YFCPliCY7FF/JB8qwEUa3VNAteq9fpL21qzk/eAF8o/rHvhQSkffn28xYGLXa6yAOnDwcnnd93P5NpjMz66ZzXHtoRfLcB8R/n7cICEkeJFMyzT+UFyWETO6jtgxYHnev+9DzixwnFMR0LEKq1xiuXtpQzsIpCSf2dUSpXMPfsVcuWrFSrqsZqIiCxGY61HLrQj33FMZG9AwxZXXJt/7i9086S2goQ0nwOk/PLrWVPOC17v5flgWZZHnMvIplpvyxrLkDDieK5cIlMtlXS27gYyb3yN0ndBCSi+4cYsrlO74xQlDbprwl5Rvp0AtdNAemAus4cUPmgL7V30HUTOFsir4855FKrFVyvBKQ7gzQt4Xop0A04JqAz3P8gwMO4ZNQIkI9IRsWnRqDfwB+2LisKNCX6AHjJtyS9U6ORwac6PIPBYDAYDK53/AKTcNBwHtWhrgAAAABJRU5ErkJggg==)](mailto:artemisia666@foxmail.com)&nbsp;[![Email](https://img.shields.io/badge/ProtonMail%20%40-6D4AFF?style=flat&color=black&logo=protonmail)](mailto:ljxme01@proton.me)
 
-### :package: Components
 
-Theme includes a lot of components, which can not only be used in the theme, but also in other astro projects.
 
-> For other astro projects, UnoCSS is required. See [Package README](https://github.com/cworld1/astro-theme-pure/blob/main/packages/pure/README.md#use-with-common-astro-project) for more details.
+[![Bilibili](https://img.shields.io/badge/-Bilibili%20%E2%98%85-black?labelColor=black&logo=bilibili&logoColor=white&style=flat)](https://space.bilibili.com/3546950943115449)&nbsp;[![WeChat](https://img.shields.io/badge/-WeChat%20%E2%98%85-black?labelColor=black&logo=wechat&logoColor=white&style=flat)](https://u.wechat.com/EDJzqbh66nwOSG1so0yljIE?s=4)&nbsp;[![TikTok](https://img.shields.io/badge/-TikTok%20%E2%98%85-black?labelColor=black&logo=tiktok&logoColor=white&style=flat)](https://v.douyin.com/N1FxNEYr0Wc/)&nbsp;[![QQ](https://img.shields.io/badge/-QQ%20%E2%98%85-black?labelColor=black&logo=qq&logoColor=white&style=flat)](https://qm.qq.com/q/cwql0sLR3G)
 
-- Basic components: `Aside`, `Tabs`, `Timeline`, `Steps`, `Spoiler`...
-- Advanced components: `GithubCard`, `LinkPreview`, `Quote`, `QRCode`...
+<!-- Copy-paste in your Readme.md file -->
 
-### :white_check_mark: Lighthouse score
+<a href="https://next.ossinsight.io/widgets/official/compose-user-dashboard-stats?user_id=114164438" target="_blank" style="display: block" >
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-user-dashboard-stats/thumbnail.png?user_id=114164438&image_size=auto&color_scheme=dark" width="771" height="auto">
+    <img alt="Dashboard stats of @ljxme" src="https://next.ossinsight.io/widgets/official/compose-user-dashboard-stats/thumbnail.png?user_id=114164438&image_size=auto&color_scheme=light" width="771" height="auto">
+  </picture>
+</a>
 
-[![lighthouse-score](./.github/assets/lighthouse-score.png)](https://pagespeed.web.dev/analysis/https-cworld-top/o229zrt5o4?form_factor=mobile&hl=en)
+<!-- Made with [OSS Insight](https://ossinsight.io/) -->
 
-## Documentation
+### Skills ~~(Still Learning)~~
 
-[Docs](https://astro-pure.js.org/docs) | [Showcase](https://github.com/cworld1/astro-theme-pure/issues/10)
+![skills](https://go-skill-icons.vercel.app/api/icons?i=c,cpp,java,python,js,html,css,ts,astro,powershell,linux,github,githubactions,bash,markdown&theme=light)
 
-## Package
+### Tools & Platform ~~(Maybe I use)~~
 
-See [astro-theme-pure](https://www.npmjs.com/package/astro-pure) on npm.
+![tools & platform](https://go-skill-icons.vercel.app/api/icons?i=vscode,pycharm,idea,cursor,chatgpt,edge,chrome,vercel,cloudflare,git,windows,debian,centos,ubuntu,docker&theme=light)
 
-## Local development
+### Others
 
-Environment requirements:
+[![ljxme's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=ljxme&theme=github-light&radius=16&height=300&border_color=E0E0E0)](https://github.com/ashutosh00710/github-readme-activity-graph)
 
-- [Nodejs](https://nodejs.org/): 18.0.0+
-
-Clone the repository:
-
-```shell
-git clone https://github.com/cworld1/astro-theme-pure.git
-cd astro-theme-pure
-```
-
-Useful commands:
-
-```shell
-# install dependencies
-bun install
-
-# start the dev server
-bun dev
-
-# build the project
-bun run build
-
-# preview (after the build)
-bun preview
-
-# create a new post
-bun new
-```
-
-## Contributions
-
-To spend more time coding and less time fiddling with whitespace, this project uses code conventions and styles to encourage consistency. Code with a consistent style is easier (and less error-prone!) to review, maintain, and understand.
-
-## Thanks
-
-- [Astro Cactus](https://github.com/chrismwilliams/astro-theme-cactus)
-- [Astro Resume](https://github.com/srleom/astro-theme-resume)
-- [Starlight](https://github.com/withastro/starlight)
-
-Other third party references are on [Docs#Contributions](https://astro-pure.js.org/docs/advanced/thanks). Appreciate for all open source libraries.
-
-## License
-
-This project is licensed under the Apache 2.0 License.
-
-[![Star History Chart](https://api.star-history.com/svg?repos=cworld1/astro-theme-pure&type=Date)](https://star-history.com/#cworld1/astro-theme-pure&Date)
+<div align="right">
+  <img src="./README.assets/svg/signature.svg" width="150" alt="signature">
+</div>
