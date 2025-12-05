@@ -5,6 +5,7 @@ import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card, Icon, Label } from 'astro-pure/user'
+import Vercount from '@/components/custom/Vercount.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
 // import ProjectCard from '@/components/home/ProjectCard.astro' 设置站点项目时记得打开,其他的类似
 import Section from '@/components/home/Section.astro'
@@ -115,26 +116,7 @@ if (imagePath && !images[imagePath])
       <!-- 右侧边栏 -->
       <div class='md:w-1/3 md:mt-0'>
         <RecentComments />
-        <div class='mt-4 border-t pt-4'>
-          <div class='text-base font-medium mb-2'>网站访问统计</div>
-          <div class='space-y-2 text-sm leading-relaxed'>
-            <p>
-              😮Total Page View <span id='vercount_value_page_pv' class='font-semibold'
-                >Loading...</span
-              >
-            </p>
-            <p>
-              😮Total Visits <span id='vercount_value_site_pv' class='font-semibold'
-                >Loading...</span
-              >
-            </p>
-            <p>
-              😮Site Total Visitors <span id='vercount_value_site_uv' class='font-semibold'
-                >Loading...</span
-              >
-            </p>
-          </div>
-        </div>
+        <Vercount />
       </div>
 
       {

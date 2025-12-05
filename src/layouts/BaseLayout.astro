@@ -2,7 +2,7 @@
 import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
-import config from '@/site-config'
+import config, { vercount } from '@/site-config'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -63,7 +63,7 @@ const {
     </style>
 
     {/* Vercount */}
-    <script src='https://vercount.one/js' async is:inline></script>
+    {vercount.enable && <script src={vercount.script} async is:inline data-astro-rerun />}
 
     {/* Netease Mini Player */}
     <!-- <div class="netease-mini-player" transition:persist

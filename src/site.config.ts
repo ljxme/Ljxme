@@ -1,5 +1,10 @@
 import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
+export const vercount: { enable: boolean; script: string } = {
+  enable: true,
+  script: 'https://cn.vercount.one/js'
+}
+
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
