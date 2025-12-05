@@ -45,7 +45,7 @@ jobs:
       - name: 🏗️ Build Astro project
         run: |
           echo "🏗️ 正在构建 Astro 项目..."
-          pnpm run build
+          npm run build
           echo "✅ 构建完成"
 
       # Deploy to page branch (GitHub Pages or static repository)
