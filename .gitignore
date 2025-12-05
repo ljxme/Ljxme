@@ -22,9 +22,6 @@ dist/
 *.code-workspace
 
 ### Node ###
-# package-lock file is generated when running npm commands
-pnpm-lock.yaml
-
 # logs
 npm-debug.log*
 yarn-debug.log*
