@@ -1,32 +1,31 @@
-/* 诗歌背景样式 */
 .poem-background {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* 确保背景居中 */
-  z-index: -1; /* 确保在内容后面 */
-  opacity: 0.3; /* 更自然的透明度 */
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  opacity: 0.3;
   width: 100%;
   height: 100%;
-  text-align: left; /* 左对齐 */
-  color: #6b4f3c; /* 深棕色 */
+  text-align: left;
+  color: #6b4f3c;
   pointer-events: none;
-  line-height: 2; /* 行距调整 */
-  letter-spacing: 2px; /* 字间距 */
-  writing-mode: vertical-rl; /* 从右到左竖排 */
-  display: block; /* 保证块级布局 */
+  line-height: 2;
+  letter-spacing: 2px;
+  writing-mode: vertical-rl;
+  display: block;
   background-size: cover;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15); /* 墨迹感阴影 */
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
 }
 
 .poem-background p {
   margin: 0;
   font-size: 4.5rem;
-  font-family: 'CaoShu Simp2Trad', serif; /* 使用毛笔风格字体 */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2), 0px 0px 12px rgba(0, 0, 0, 0.1); /* 墨迹的阴影 */
-  display: inline-block; /* 保证每一行诗句是单独的一块 */
-  width: auto; /* 确保宽度自适应 */
-  padding-top: 60px; /* 为诗歌文本添加向下的偏移量 */
+  font-family: 'CaoShu Simp2Trad', serif;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2), 0px 0px 12px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  width: auto;
+  padding-top: 60px;
 }
 
 /* 词语背景样式 */
@@ -34,29 +33,36 @@
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%); /* 只水平居中，不垂直偏移 */
-  z-index: -1; /* 确保在内容后面 */
-  opacity: 0.3; /* 更自然的透明度 */
+  transform: translateX(-50%);
+  z-index: -1;
+  opacity: 0.3;
   width: 100%;
   height: 100%;
-  color: #6b4f3c; /* 深棕色 */
+  color: #6b4f3c;
   pointer-events: none;
-  line-height: 1; /* 行距调整 */
-  letter-spacing: 2px; /* 字间距 */
-  writing-mode: horizontal-tb; /* 横向排列 */
-  display: flex; /* 使用flex布局 */
-  flex-direction: column; /* 垂直方向排列 */
-  justify-content: flex-start; /* 从顶部开始 */
-  align-items: center; /* 水平居中 */
-  padding-top: 80px; /* 顶部留出一定空间 */
+  line-height: 1;
+  letter-spacing: 2px;
+  writing-mode: horizontal-tb;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 80px;
   background-size: cover;
 }
 
 .words-background p {
   margin: 0;
   font-size: 4.5rem;
-  font-family:'CaoShu Simp2Trad', serif; /* 使用草体 */
+  font-family:'CaoShu Simp2Trad', serif;
   font-weight: 400;
-  display: block; /* 每行文字独立一行 */
-  width: auto; /* 确保宽度自适应 */
+  display: block;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .poem-background,
+  .words-background {
+    display: none !important;
+  }
 }
